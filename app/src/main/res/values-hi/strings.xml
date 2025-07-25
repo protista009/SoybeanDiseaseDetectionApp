@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <string name="app_name">सोयाबीन डिज़ीज़ डिटेक्शन</string>
+
+        <string name="capture_image">कैमरां</string>
+        <string name="select_from_gallery">गैलरी से चुनें</string>
+        <string name="result_placeholder">पहचान परिणाम यहाँ दिखाई देंगे...</string>
+        <string name="selected_leaf_image">चयनित पत्ती छवि</string>
+
+        <string name="Home">मुखपृष्ठ</string>
+        <string name="About">परिचय</string>
+        <string name="Predict">पूर्वानुमान</string>
+        <string name="History">इतिहास</string>
+        <string name="Language">भाषा</string>
+
+        <string name="Clear_History" >इतिहास मिटा दें</string>
+
+        <!-- Titles -->
+        <string name="sudden_death_title">सडन डेथ सिंड्रोम</string>
+        <string name="southern_blight_title">सदर्न ब्लाइट</string>
+        <string name="septoria_title">सेप्टोरिया</string>
+        <string name="brown_spot_title">ब्राउन स्पॉट</string>
+        <string name="bacterial_blight_title">बैक्टीरियल ब्लाइट</string>
+        <string name="ferrugen_title">फेर्रूजेन</string>
+        <string name="yellow_mosaic_title">येलो मोज़ेक</string>
+        <string name="mosaic_virus_title">मोज़ेक वायरस</string>
+        <string name="powdery_mildew_title">पाउडरी मिल्ड्यू</string>
+
+        <!-- Descriptions -->
+        <string name="desc_sudden_death">सडन डेथ सिंड्रोम (SDS) एक कवकीय रोग है जो सोयाबीन की पत्तियों में पीलेपन, भूरेपन और मरने का कारण बनता है। यह मध्य से देर के मौसम में प्रकट होता है और उपज को गंभीर रूप से कम कर सकता है।</string>
+        <string name="desc_southern_blight">एक मिट्टी से उत्पन्न फंगल रोग जो पत्तियों के पीलेपन, मुरझाने और तने के आधार पर सफेद फंगल वृद्धि का कारण बनता है।</string>
+        <string name="desc_septoria">सेप्टोरिया ब्राउन स्पॉट निचली पत्तियों पर छोटे, गहरे भूरे धब्बे बनाता है जो गीले, गर्म मौसम में पत्तियों को समय से पहले झड़ने का कारण बन सकता है।</string>
+        <string name="desc_brown_spot">एक सामान्य फंगल रोग जो पत्तियों पर छोटे, लाल-भूरे धब्बे पैदा करता है, जो नीचे से ऊपर की ओर फैलते हैं।</string>
+        <string name="desc_bacterial_blight">Pseudomonas syringae द्वारा उत्पन्न, यह पत्तियों पर पानी जैसे धब्बे बनाता है जो भूरे हो जाते हैं और अधिक नमी में फट सकते हैं।</string>
+        <string name="desc_ferrugen">यह रोग पत्तियों पर लाल किनारों वाले गोलाकार भूरे धब्बे बनाता है और नम वातावरण में उपज को काफी कम कर सकता है।</string>
+        <string name="desc_yellow_mosaic">एक विषाणुजनित रोग जो सफेद मक्खियों द्वारा फैलता है; यह पत्तियों पर पीले धब्बे और मोज़ेक जैसे पैटर्न बनाता है, जिससे पौधे की वृद्धि रुक जाती है।</string>
+        <string name="desc_mosaic_virus">कई वायरसों का एक सामान्य नाम जो पत्तियों पर हरे और पीले धब्बेदार पैटर्न बनाते हैं और पौधे की शक्ति और उपज को कम करते हैं।</string>
+        <string name="desc_powdery_mildew">पत्तियों की सतह पर सफेद, चूर्णीय फंगल वृद्धि द्वारा पहचाना जाता है; यह आमतौर पर शुष्क, गर्म मौसम में प्रकट होता है।</string>
+
+        <!-- Add translated versions of all strings here -->
+        <string name="mosaic_virus">मोज़ेक वायरस</string>
+        <string name="southern_blight">सदर्न ब्लाइट</string>
+        <string name="sudden_death_syndrome">सडन डेथ सिंड्रोम</string>
+        <string name="yellow_mosaic">येलो मोज़ेक</string>
+        <string name="bacterial_blight">बैक्टीरियल ब्लाइट</string>
+        <string name="brown_spot">ब्राउन स्पॉट</string>
+        <string name="crestamento">क्रेस्टामेंटो</string>
+        <string name="ferrugen">फेरुगेन</string>
+        <string name="powdery_mildew">पाउडरी मिल्ड्यू</string>
+        <string name="septoria">सेप्टोरिया</string>
+
+
+        <string name="no_soyabean_leaf_detected">कोई सोयाबीन पत्ती नहीं मिली</string>
+
+        <string name="healthy_soyabean_leaf">स्वस्थ सोयाबीन पत्ता</string>
+        <string name="disease_detected">पाई गई बीमारी: </string>
+
+
+        <string name="result">परिणाम</string>
+
+        <string name="confidence_and_time">विश्वास: %.1f%%\nसमय: %s</string>
+        <string name="uncertain">uncertain</string>
+        <string name="legal_notices">कानूनी सूचनाएं</string>
+
+
+
+
+</resources>
