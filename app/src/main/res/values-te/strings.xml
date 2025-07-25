@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">సోయా వ్యాధి గుర్తింపు</string>
+
+    <string name="capture_image">కెమెరా</string>
+    <string name="select_from_gallery">గ్యాలరీ నుండి ఎంచుకోండి</string>
+    <string name="result_placeholder">ఫలితాలు ఇక్కడ చూపబడతాయి...</string>
+    <string name="selected_leaf_image">ఎంచుకున్న ఆకుపత్రి చిత్రం</string>
+
+    <string name="Home">హోం</string>
+    <string name="About">గురించి</string>
+    <string name="Predict">అంచనా</string>
+    <string name="History">చరిత్ర</string>
+    <string name="Language">భాష</string>
+    <string name="Clear_History">చరిత్రను తొలగించు</string>
+
+    <!-- Titles -->
+    <string name="sudden_death_title">సడెన్ డెత్ సిండ్రోమ్</string>
+    <string name="southern_blight_title">సదర్న్ బ్లైట్</string>
+    <string name="septoria_title">సెప్టోరియా</string>
+    <string name="brown_spot_title">బ్రౌన్ స్పాట్</string>
+    <string name="bacterial_blight_title">బాక్టీరియల్ బ్లైట్</string>
+    <string name="ferrugen_title">ఫెర్రూజెన్</string>
+    <string name="yellow_mosaic_title">యెలో మోసాయిక్</string>
+    <string name="mosaic_virus_title">మోసాయిక్ వైరస్</string>
+    <string name="powdery_mildew_title">పౌడరీ మిల్డ్యూ</string>
+
+    <!-- Descriptions -->
+    <string name="desc_sudden_death">SDS ఒక ఫంగల్ వ్యాధి, ఆకులలో పసుపు, బ్రౌన్ కలర్ మరియు మరణానికి కారణం.</string>
+    <string name="desc_southern_blight">భూమిలో ఉండే ఫంగల్ వ్యాధి; ఆకులు మురుగు, కాండం వద్ద తెల్లగా పూసును ఏర్పరుస్తుంది.</string>
+    <string name="desc_septoria">సెప్టోరియా బ్రౌన్ స్పాట్ క్రింది ఆకులపై గోధుమ మచ్చలుగా కనిపిస్తుంది.</string>
+    <string name="desc_brown_spot">గోధుమ మచ్చలతో ఆకులపై వ్యాప్తి చెందే సాధారణ వ్యాధి.</string>
+    <string name="desc_bacterial_blight">ప్రమేయం గల నీటి మచ్చలు ఏర్పడి తర్వాత ముదురు మచ్చలుగా మారతాయి.</string>
+    <string name="desc_ferrugen">చుట్టూ ఎర్రని అంచులతో గోధుమ మచ్చలు ఏర్పడతాయి.</string>
+    <string name="desc_yellow_mosaic">వెయ్యి తెల్ల మూసల రూపంలో ఆకులపై కనిపిస్తుంది.</string>
+    <string name="desc_mosaic_virus">పచ్చటి మరియు పసుపు మచ్చల మాదిరిగా ఆకులపై కనిపిస్తుంది.</string>
+    <string name="desc_powdery_mildew">స్పష్టమైన తెల్ల పౌడర్ ఆకులపై కనిపిస్తుంది.</string>
+
+    <!-- Disease Names -->
+    <string name="mosaic_virus">మోసాయిక్ వైరస్</string>
+    <string name="southern_blight">సదర్న్ బ్లైట్</string>
+    <string name="sudden_death_syndrome">సడెన్ డెత్ సిండ్రోమ్</string>
+    <string name="yellow_mosaic">యెలో మోసాయిక్</string>
+    <string name="bacterial_blight">బాక్టీరియల్ బ్లైట్</string>
+    <string name="brown_spot">బ్రౌన్ స్పాట్</string>
+    <string name="crestamento">క్రెస్టమెంటో</string>
+    <string name="ferrugen">ఫెర్రూజెన్</string>
+    <string name="powdery_mildew">పౌడరీ మిల్డ్యూ</string>
+    <string name="septoria">సెప్టోరియా</string>
+
+    <string name="no_soyabean_leaf_detected">సోయా ఆకులు కనబడలేదు</string>
+
+    <string name="healthy_soyabean_leaf">ఆరోగ్యంగా ఉన్న సోయా ఆకులు</string>
+    <string name="disease_detected">గుర్తించిన వ్యాధి: </string>
+
+    <string name="result">ఫలితం</string>
+
+    <string name="confidence_and_time">నమ్మకం: %.1f%%\nసమయం: %s</string>
+    <string name="uncertain">అస్పష్టంగా ఉంది</string>
+    <string name="about_text">ఈ యాప్ ప్రధాన ఉద్దేశ్యం రైతులు సోయాబీన్ ఆకులలో వ్యాధులను త్వరగా గుర్తించడానికి, ప్రారంభ చికిత్స మరియు పంట దిగుబడిని మెరుగుపరచడంలో సహాయం చేయడం.</string>
+
+
+
+
+    <string name="legal_notices">చట్ట సూచనలు</string>
+    <string name="terms_of_use">వినియోగ నిబంధనలు</string>
+    <string name="privacy_policy">గోప్యతా విధానం</string>
+    <string name="Legal_Notices_Content">ఈ వినియోగ నిబంధనల ప్రకారం, "మీరు", "మీ" లేదా "వినియోగదారు(లు)" అంటే ఈ అప్లికేషన్‌ను బ్రౌజ్ చేయడం, ఉపయోగించడం, సైన్ అప్ చేయడం మరియు ఖాతా సృష్టించడం ద్వారా వినియోగదారుగా మారడానికి ఒప్పుకున్న వ్యక్తిని సూచిస్తుంది. "మేము", "మాకు", "మన" అనే పదాలు కంపెనీని సూచిస్తాయి.
+
+ఈ అప్లికేషన్ వినియోగంపై ఈ నిబంధనలు వర్తిస్తాయి. మీరు ఈ నిబంధనలను అంగీకరించనట్లయితే, దయచేసి అప్లికేషన్‌ను ఉపయోగించకండి.</string>
+
+    <string name="Privacy_Policy_Content">గోప్యత మరియు డేటా రక్షణ
+దయచేసి మా గోప్యతా విధానాన్ని సమీక్షించండి, ఇది మీ వినియోగాన్ని నియంత్రిస్తుంది. మీరు ఉపయోగిస్తున్న సమయంలో అందించిన వ్యక్తిగత సమాచారం గోప్యతా విధానానికి అనుగుణంగా పరిరక్షించబడుతుంది. మీరు దానిని అంగీకరించకపోతే, దయచేసి అప్లికేషన్‌ను ఉపయోగించవద్దు. అవసరమైనప్పుడు అధికారులకు సమాచారాన్ని బహిర్గతం చేయవచ్చు.</string>
+
+</resources>

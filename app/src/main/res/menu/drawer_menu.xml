@@ -17,13 +17,14 @@
         android:icon="@drawable/ic_history"
         android:title="@string/History" />
     <item
-        android:id="@+id/nav_language"
-        android:icon="@drawable/ic_language"
-        android:title="@string/Language" />
-    <item
         android:id="@+id/nav_legal"
         android:icon="@drawable/ic_legal"
         android:title="@string/legal_notices" />
+    <item
+        android:id="@+id/nav_language"
+        android:icon="@drawable/ic_language"
+        android:title="@string/Language" />
+
 
 
 </menu>

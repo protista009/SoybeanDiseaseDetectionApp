@@ -75,7 +75,24 @@
         <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
         <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
         <string name="camera">camera</string>
+
+        <string name="about_text">The main purpose of this app is helps farmers quickly identify diseases in the soybean leaves to improve early treatment and crop yield.</string>
+
+
+
+
         <string name="legal_notices">Legal Notices</string>
-        <string name="Legal_Notices_Content">Legal Notices</string>
-        <string name="Privacy_Policy_Content">Privacy Policy</string>
+        <string name="terms_of_use">Terms Of Use</string>
+        <string name="privacy_policy">Privacy Policy</string>
+        <string name="Legal_Notices_Content">For the purpose of these Terms of Use, wherever the context so requires "You", "Your" or "User(s)" shall mean any natural or legal person who has agreed to become a user of the Application by browsing, accessing, using, signing up and creating an Account (as defined below) on the Application. The term "We", "Us", "Our" shall mean the Company.
+
+Your use of the Application is governed by the following terms and conditions as set out in these Terms of Use which are incorporated herein. By accessing, browsing and using the Application, You indicate Your consent to these Terms of Use. You shall be contracting with Company and these Terms of Use including the Privacy Policy incorporated in the Application constitute Your binding obligations with the Company vis-à-vis Your use of the Application. If You disagree with any part contained in these Terms of Use, please do not access, browse or use the Application.
+</string>
+
+        <string name="Privacy_Policy_Content">Privacy and Data Protection
+Please review Our Privacy Policy, which also governs Your use, access and visits to this Application. The personal information / data provided to Us by You during the course of usage of the Application and use of Your Account will be treated as confidential and in accordance with the Privacy Policy and applicable laws and regulations. If You object to Your information being transferred or used in the manner as specified under the Privacy Policy, please do not use the Application. The Company may also transfer this information to third parties where required to do so by law or upon request from governmental, judicial, regulatory or statutory agencies or authorities.</string>
+
+
+
 </resources>
+

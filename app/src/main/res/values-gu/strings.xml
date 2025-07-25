@@ -1,8 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">સોયાબીન રોગ શોધ</string>
-    <string name="capture_image">છબી કૅપ્ચર કરો</string>
-    <string name="select_gallery">ગેલેરીમાંથી પસંદ કરો</string>
-    <string name="analyze">વિશ્લેષણ કરો</string>
-    <string name="detection_result_placeholder">હેતુ શોધવાના પરિણામો અહીં બતાવશે...</string>
+
+    <string name="app_name">સોયાબીન રોગ નિદાન</string>
+
+    <string name="capture_image">કેમેરા</string>
+    <string name="select_from_gallery">ગેલેરીમાંથી પસંદ કરો</string>
+    <string name="result_placeholder">ઓળખનો પરિણામ અહીં દેખાશે...</string>
+    <string name="selected_leaf_image">પસંદ કરેલું પાનનું ચિત્ર</string>
+
+    <string name="Home">મુખ્ય પૃષ્ઠ</string>
+    <string name="About">પરિચય</string>
+    <string name="Predict">અନુમાન</string>
+    <string name="History">ઇતિહાસ</string>
+    <string name="Language">ભાષા</string>
+
+    <string name="Clear_History">ઇતિહાસ સાફ કરો</string>
+
+    <!-- Titles -->
+    <string name="sudden_death_title">સડન ડેથ સિન્ડ્રોમ</string>
+    <string name="southern_blight_title">સધર્ન બ્લાઇટ</string>
+    <string name="septoria_title">સેપ્ટોરીયા</string>
+    <string name="brown_spot_title">બ્રાઉન સ્પોટ</string>
+    <string name="bacterial_blight_title">બેક્ટેરિયલ બ્લાઇટ</string>
+    <string name="ferrugen_title">ફેરુજેન</string>
+    <string name="yellow_mosaic_title">યેલો મોઝેઈક</string>
+    <string name="mosaic_virus_title">મોઝેઈક વાયરસ</string>
+    <string name="powdery_mildew_title">પાઉડરી મિલ્ડ્યૂ</string>
+
+    <!-- Descriptions -->
+    <string name="desc_sudden_death">સડન ડેથ સિન્ડ્રોમ (SDS) એ એક ફંગલ રોગ છે જે સોયાબીનના પાનમાં પીળાશ, બ્રાઉનિંગ અને સુકાવાનું કારણ બને છે. તે સિઝનની મધ્યથી અંત સુધી આવે છે અને ઉપજને ગંભીર રીતે ઘટાડે છે.</string>
+    <string name="desc_southern_blight">માટીની અંદરથી આવતો ફંગલ રોગ છે જે પાનમાં પીળાશ, સુકાવા અને ડાંઠાના તળિયે સફેદ ફંગલ વૃદ્ધિનું કારણ બને છે.</string>
+    <string name="desc_septoria">સેપ્ટોરીયા બ્રાઉન સ્પોટ નીચેના પાંદડાં પર નાના, ઘેરા બ્રાઉન ડાઘો બનાવે છે જે ભીના, ગરમ હવામાનમાં પાંદડાં સમય પહેલાં ખસી જાય છે.</string>
+    <string name="desc_brown_spot">એક સામાન્ય ફંગલ રોગ જે પાંદડાં પર નાના, લાલ-ભૂરા ડાઘો ઉત્પન્ન કરે છે, જે નીચે થી ઉપર ફેલાય છે.</string>
+    <string name="desc_bacterial_blight">Pseudomonas syringae દ્વારા થતાં આ રોગ પાંદડાં પર પાણી જેવા ડાઘો બનાવે છે જે પછી બ્રાઉન થાય છે અને ભીની હાલતમાં ફાટી શકે છે.</string>
+    <string name="desc_ferrugen">આ રોગ પાંદડાં પર લાલ ધારાવાળા ગોળાકાર બ્રાઉન ડાઘો બનાવે છે અને ભીણું વાતાવરણ હોય ત્યારે ઉપજને ગંભીર રીતે ઘટાડી શકે છે.</string>
+    <string name="desc_yellow_mosaic">સફેદ માખીઓ દ્વારા ફેલાતો વાયરસજન્ય રોગ છે; તે પાંદડાં પર પીળા ડાઘો અને મોઝેઈક જેવા પેટર્ન બનાવે છે, જેના કારણે વનસ્પતિની વૃદ્ધિ અટકે છે.</string>
+    <string name="desc_mosaic_virus">ઘણા વાયરસ માટે સામાન્ય નામ, જે પાંદડાં પર લીલા અને પીળા ડાઘાવાળા પેટર્ન બનાવે છે અને છોડની તાકાત અને ઉપજને ઘટાડે છે.</string>
+    <string name="desc_powdery_mildew">પાંદડાંની સપાટી પર સફેદ, પાવડર જેવી ફંગલ વૃદ્ધિથી ઓળખાય છે; સામાન્ય રીતે તે સુકા અને ગરમ હવામાનમાં જોવા મળે છે.</string>
+
+    <!-- Translated class names -->
+    <string name="mosaic_virus">મોઝેઈક વાયરસ</string>
+    <string name="southern_blight">સધર્ન બ્લાઇટ</string>
+    <string name="sudden_death_syndrome">સડન ડેથ સિન્ડ્રોમ</string>
+    <string name="yellow_mosaic">યેલો મોઝેઈક</string>
+    <string name="bacterial_blight">બેક્ટેરિયલ બ્લાઇટ</string>
+    <string name="brown_spot">બ્રાઉન સ્પોટ</string>
+    <string name="crestamento">ક્રેસ્ટામેન્ટો</string>
+    <string name="ferrugen">ફેરુજેન</string>
+    <string name="powdery_mildew">પાઉડરી મિલ્ડ્યૂ</string>
+    <string name="septoria">સેપ્ટોરીયા</string>
+
+    <string name="no_soyabean_leaf_detected">કોઈ સોયાબીન પાન મળ્યું નથી</string>
+
+    <string name="healthy_soyabean_leaf">તંદુરસ્ત સોયાબીન પાન</string>
+    <string name="disease_detected">મળેલી બીમારી: </string>
+
+    <string name="result">પરિણામ</string>
+
+    <string name="confidence_and_time">વિશ્વાસ: %.1f%%\nસમય: %s</string>
+    <string name="uncertain">અનિશ્ચિત</string>
+    <string name="about_text">આ ઍપનો મુખ્ય હેતુ ખેડૂતોને સોયાબીનના પાનમાં ત્વરિત રીતે રોગો ઓળખવામાં મદદ કરવો છે જેથી તાત્કાલિક ઉપચાર અને પાકની ઉત્પાદકતા સુધારી શકાય.</string>
+
+
+
+
+    <string name="legal_notices">કાનૂની સૂચનાઓ</string>
+    <string name="terms_of_use">વપરાશની શરતો</string>
+    <string name="privacy_policy">ગોપનીયતા નીતિ</string>
+    <string name="Legal_Notices_Content">આ ઉપયોગની શરતોના હેતુ માટે "તમે", "તમારું" અથવા "યૂઝર(ઝ)" એ કોઈ પણ વ્યક્તિ કે જે એપ્લિકેશનનો ઉપયોગ કરે છે તે માટે છે. "અમે", "અમારું", "કંપની" એ સંસ્થા માટે છે.
+
+તમે જે રીતે એપ્લિકેશનનો ઉપયોગ કરો છો તે આ શરતો હેઠળ આવે છે. જો તમે આમાંથી કોઈ પણ શરત સાથે સંમત નથી, તો કૃપા કરીને એપ્લિકેશનનો ઉપયોગ કરશો નહીં.</string>
+
+    <string name="Privacy_Policy_Content">ગોપનીયતા અને ડેટા સંરક્ષણ
+કૃપા કરીને અમારી ગોપનીયતા નીતિ વાંચો, જે તમારા ડેટાનો ઉપયોગ કેવી રીતે થાય છે તે અંગે માહિતી આપે છે. તમે આપેલી માહિતી ગોપનીય રાખવામાં આવશે. જો તમે આ રીતે ઉપયોગ ન કરવા માંગતા હોવ તો એપ્લિકેશનનો ઉપયોગ કરશો નહીં. જરૂરી હોવાથી આ માહિતી તૃતીય પક્ષ સાથે શેર કરી શકાય છે.</string>
+
+
 </resources>

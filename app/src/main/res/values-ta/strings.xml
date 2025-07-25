@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">சோயா நோய்கள் கண்டறிதல்</string>
+
+    <string name="capture_image">கேமரா</string>
+    <string name="select_from_gallery">கேலரியில் இருந்து தேர்வு</string>
+    <string name="result_placeholder">முன்னறிவிப்பு இங்கே காட்டப்படும்...</string>
+    <string name="selected_leaf_image">தேர்ந்தெடுக்கப்பட்ட இலை படம்</string>
+
+    <string name="Home">முகப்பு</string>
+    <string name="About">பற்றி</string>
+    <string name="Predict">முன்னறிக</string>
+    <string name="History">வரலாறு</string>
+    <string name="Language">மொழி</string>
+    <string name="Clear_History">வரலாற்றை அழிக்கவும்</string>
+
+    <!-- Titles -->
+    <string name="sudden_death_title">சடுமுடிவு நோய்</string>
+    <string name="southern_blight_title">தெற்கு பிளைட்</string>
+    <string name="septoria_title">செப்டோரியா</string>
+    <string name="brown_spot_title">பிரவுன் ஸ்பாட்</string>
+    <string name="bacterial_blight_title">பாக்டீரியா பிளைட்</string>
+    <string name="ferrugen_title">பெருஜன்</string>
+    <string name="yellow_mosaic_title">மஞ்சள் மோசைக்</string>
+    <string name="mosaic_virus_title">மோசைக் வைரஸ்</string>
+    <string name="powdery_mildew_title">பவுடரி மில்டியு</string>
+
+    <!-- Descriptions -->
+    <string name="desc_sudden_death">SDS என்பது பாசிப்பட்டைகள், பழுப்பு மற்றும் இலை இறப்பை ஏற்படுத்தும் பூஞ்சை நோயாகும்.</string>
+    <string name="desc_southern_blight">இது இலை மஞ்சள் ஆகி தண்டு அடியில் வெள்ளை பூஞ்சை வளர்ச்சி ஏற்படுகிறது.</string>
+    <string name="desc_septoria">இது இழை இலைகளில் பழுப்பு புள்ளிகளை ஏற்படுத்துகிறது.</string>
+    <string name="desc_brown_spot">பொதுவான பூஞ்சை நோய்; சிறிய பழுப்பு புள்ளிகள் ஏற்படும்.</string>
+    <string name="desc_bacterial_blight">பாக்டீரியா காரணமாக வெள்ளை புள்ளிகள் பிறகு பழுப்பாக மாறும்.</string>
+    <string name="desc_ferrugen">பழுப்பு புள்ளிகள் மற்றும் நன்கு ஈரப்பதத்தில் குறைந்த விளைச்சல்.</string>
+    <string name="desc_yellow_mosaic">இலைகளில் மஞ்சள் புள்ளிகள் மற்றும் மோசைக் வடிவங்கள்.</string>
+    <string name="desc_mosaic_virus">மஞ்சள்-பச்சை வடிவங்கள் ஏற்படும், வளர்ச்சியை பாதிக்கிறது.</string>
+    <string name="desc_powdery_mildew">இலை மேல் வெள்ளை தூள் போல பூஞ்சை வளர்ச்சி.</string>
+
+    <!-- Names -->
+    <string name="mosaic_virus">மோசைக் வைரஸ்</string>
+    <string name="southern_blight">தெற்கு பிளைட்</string>
+    <string name="sudden_death_syndrome">சடுமுடிவு நோய்</string>
+    <string name="yellow_mosaic">மஞ்சள் மோசைக்</string>
+    <string name="bacterial_blight">பாக்டீரியா பிளைட்</string>
+    <string name="brown_spot">பிரவுன் ஸ்பாட்</string>
+    <string name="crestamento">கிரெஸ்டமென்டோ</string>
+    <string name="ferrugen">பெருஜன்</string>
+    <string name="powdery_mildew">பவுடரி மில்டியு</string>
+    <string name="septoria">செப்டோரியா</string>
+
+    <string name="no_soyabean_leaf_detected">சோயா இலை கண்டறியப்படவில்லை</string>
+
+    <string name="healthy_soyabean_leaf">ஆரோக்கியமான சோயா இலை</string>
+    <string name="disease_detected">கண்டறியப்பட்ட நோய்: </string>
+
+    <string name="result">முடிவு</string>
+
+    <string name="confidence_and_time">நம்பிக்கை: %.1f%%\nநேரம்: %s</string>
+    <string name="uncertain">நிச்சயமில்லை</string>
+    <string name="about_text">இந்த பயன்பாட்டின் முதன்மையான நோக்கம் விவசாயிகள் சோயாபீன் இலைகளில் நோய்களை விரைவில் கண்டறிந்து, ஆரம்ப சிகிச்சையும் அறுவடை மகபெருக்கையும் மேம்படுத்த உதவுவதாகும்.</string>
+
+
+
+    <string name="legal_notices">சட்ட அறிவிப்புகள்</string>
+    <string name="terms_of_use">பயன்பாட்டு விதிமுறைகள்</string>
+    <string name="privacy_policy">தனியுரிமைக் கொள்கை</string>
+    <string name="Legal_Notices_Content">இந்த பயன்பாட்டு விதிமுறைகளின் நோக்கத்திற்கு, "நீங்கள்", "உங்கள்" அல்லது "பயனர்(கள்)" என்பது, பயன்பாட்டை உலாவி, அணுகி, பயன்படுத்தி, கணக்கை உருவாக்கி, இதில் பங்கெடுக்க ஒப்புக்கொண்ட எந்தவொரு நபர் அல்லது சட்டபூர்வ நபரையும் குறிக்கின்றது. "நாங்கள்", "எங்களுக்கு", "எங்கள்" என்பவை நிறுவனத்தை குறிக்கின்றன.
+
+நீங்கள் பயன்பாட்டை பயன்படுத்தும் விதிமுறைகள் இவற்றின் கீழ் அமைந்துள்ளன. நீங்கள் பயன்பாட்டை அணுகும் மற்றும் பயன்படுத்தும் போது, இந்த விதிமுறைகளுக்கு ஒப்புக்கொள்கிறீர்கள். இதில் ஏதேனும் ஒப்புக்கொள்ளவில்லை என்றால், தயவுசெய்து பயன்பாட்டை பயன்படுத்த வேண்டாம்.</string>
+
+    <string name="Privacy_Policy_Content">தனியுரிமை மற்றும் தரவுக் காப்பு
+தயவுசெய்து எங்கள் தனியுரிமைக் கொள்கையை பார்வையிடவும், இது உங்கள் பயன்பாட்டை இயக்குகிறது. பயன்பாட்டின் போது நீங்கள் வழங்கும் தகவல் நம்பிக்கையாக கையாளப்படும். தனியுரிமைக் கொள்கை படி உங்கள் தகவலை அரசு அல்லது சட்டத்துறை கோரும்போது பகிர முடியும்.</string>
+
+</resources>
