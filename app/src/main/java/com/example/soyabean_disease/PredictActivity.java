@@ -195,14 +195,19 @@ public class PredictActivity extends AppCompatActivity {
 
 
         TextView tvTemperature = findViewById(R.id.tvTemperature);
-        TextView tvDateTime = findViewById(R.id.tvDateTime);
+        TextView tvDate = findViewById(R.id.tvDate);
+        TextView tvTime = findViewById(R.id.tvTime);
         TextView tvLocation = findViewById(R.id.tvLocation);
 
         // Set current date and time
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault());
-        String currentDateTime = sdf.format(new Date());
-        tvDateTime.setText(currentDateTime);
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
 
+        String currentDate = sdfDate.format(new Date());
+        String currentTime = sdfTime.format(new Date());
+
+        tvDate.setText(currentDate);
+        tvTime.setText(currentTime);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
