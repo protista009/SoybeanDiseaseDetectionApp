@@ -30,19 +30,8 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_about2);
 
 
-        VideoView videoView = findViewById(R.id.videoView);
-
-        // Load video from res/raw/video_app.mp4
-        Uri videoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video_app);
-        videoView.setVideoURI(videoUri);
-
-        // Start video once it's ready
-        videoView.setOnPreparedListener(mp -> {
-            mp.setLooping(true); // Loop the video (optional)
-            videoView.start();   // Start playing
-        });
     }
 }

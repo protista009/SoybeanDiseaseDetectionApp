@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.tabs.TabLayout;
@@ -27,8 +28,8 @@ public class LegalNotices extends AppCompatActivity {
         privacyView = inflater.inflate(R.layout.tab_privacy_policy, null);
 
         // Add tabs
-        tabLayout.addTab(tabLayout.newTab().setText("Legal Notices"));
-        tabLayout.addTab(tabLayout.newTab().setText("Privacy Policy"));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.terms_of_use)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.privacy_policy)));
 
         // Show default tab content (Legal Notices)
         tabContent.addView(legalView);
@@ -48,5 +49,10 @@ public class LegalNotices extends AppCompatActivity {
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
+    }
+
+    @NonNull
+    private static String getString() {
+        return "Terms of Use";
     }
 }

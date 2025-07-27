@@ -28,6 +28,9 @@ import android.content.Intent;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -50,10 +53,22 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
+import java.util.Date;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.PriorityQueue;
+
+
+import com.example.soyabean_disease.WeatherResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PredictActivity extends AppCompatActivity {
 
@@ -102,6 +117,9 @@ public class PredictActivity extends AppCompatActivity {
             });
 
 
+
+
+
     private void launchCropper(Uri imageUri) {
         CropImageOptions options = new CropImageOptions();
         options.fixAspectRatio = true;
@@ -132,6 +150,36 @@ public class PredictActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
+    private void fetchWeather(double lat, double lon, TextView tvTemp, TextView tvLocation) {
+        String apiKey = "9d6b6789f75815313ee65b13a56fb209"; // 🔑 Replace with your actual API key
+        String userLang = Locale.getDefault().getLanguage();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WeatherApi api = retrofit.create(WeatherApi.class);
+        Call<WeatherResponse> call = api.getWeather(lat, lon, apiKey, "metric", userLang);
+        call.enqueue(new Callback<WeatherResponse>() {
+            @Override
+            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    WeatherResponse data = response.body();
+                    tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", data.main.temp));
+                    tvLocation.setText(data.name);
+                } else {
+                    Toast.makeText(PredictActivity.this, "Weather data unavailable", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+                Toast.makeText(PredictActivity.this, "Weather fetch failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    FusedLocationProviderClient fusedLocationClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -144,6 +192,37 @@ public class PredictActivity extends AppCompatActivity {
         // Set up Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        TextView tvTemperature = findViewById(R.id.tvTemperature);
+        TextView tvDate = findViewById(R.id.tvDate);
+        TextView tvTime = findViewById(R.id.tvTime);
+        TextView tvLocation = findViewById(R.id.tvLocation);
+
+        // Set current date and time
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
+        String currentDate = sdfDate.format(new Date());
+        String currentTime = sdfTime.format(new Date());
+
+        tvDate.setText(currentDate);
+        tvTime.setText(currentTime);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+
+        // ✅ This part only fetches weather on location success
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        fetchWeather(location.getLatitude(), location.getLongitude(), tvTemperature, tvLocation);
+                    }
+                });
 
         // Set up DrawerLayout and NavigationView
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -201,9 +280,10 @@ public class PredictActivity extends AppCompatActivity {
 
     }
 
-    private void showLanguageDialog() {
-        final String[] languages = {"English", "Hindi"};
-        final String[] codes = {"en", "hi"};
+
+        private void showLanguageDialog() {
+        final String[] languages = {"English", "Hindi","Gujarati","Tamil","Telugu"};
+        final String[] codes = {"en", "hi","gu","ta","te"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose Language");
@@ -229,11 +309,6 @@ public class PredictActivity extends AppCompatActivity {
     }
 
 
-    private void loadLocale() {
-        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-        String language = prefs.getString("My_Lang", "en");
-        setLocale(language);
-    }
 
 
 
@@ -349,7 +424,7 @@ public class PredictActivity extends AppCompatActivity {
                         break;
 
                     case 2: // Unhealthy
-                        if (detection.confidence > 0.4f) {
+                        if (detection.confidence > 0.3f) {
                             Bitmap cropped = cropDetection(currentBitmap, detection.box);
                             String diseaseName = classifyDisease(cropped); // 👈 secondary model
                             tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName);
@@ -603,4 +678,4 @@ public class PredictActivity extends AppCompatActivity {
             this.classId = classId;
         }
     }
-} 
+}

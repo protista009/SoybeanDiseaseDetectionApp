@@ -55,6 +55,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        mlModelBinding = true
     }
 
 
@@ -69,6 +70,7 @@ android {
 dependencies {
 
     implementation(libs.room.common.jvm)
+    implementation(libs.play.services.location)
     val room_version = "2.5.2"  // or latest stable
 
 
@@ -111,6 +113,11 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Firebase (only if needed)
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
 
 
     // Testing
