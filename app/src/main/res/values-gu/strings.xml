@@ -50,7 +50,7 @@
     <string name="powdery_mildew">પાઉડરી મિલ્ડ્યૂ</string>
     <string name="septoria">સેપ્ટોરીયા</string>
 
-    <string name="no_soyabean_leaf_detected">કોઈ સોયાબીન પાન મળ્યું નથી</string>
+    <string name="no_soyabean_leaf_detected">સોયાબીનની પાંદડી મળતી નથી. કૃપા કરીને છબી એ રીતે ક્રોપ કરો કે પાંદડી અથવા રોગ યોગ્ય રીતે દેખાય.</string>
 
     <string name="healthy_soyabean_leaf">તંદુરસ્ત સોયાબીન પાન</string>
     <string name="disease_detected">મળેલી બીમારી: </string>

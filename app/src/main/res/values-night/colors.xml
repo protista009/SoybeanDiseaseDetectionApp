@@ -10,16 +10,15 @@
     <color name="surface">#FFFFFF</color>
     <color name="onSurface">#000000</color>
     <color name="status_bar">#388E3C</color>
-    <color name="SDS_text_color">#000000</color>
-    <color name="SBL_text_color">#000000</color>
-    <color name="SPT_text_color">#000000</color>
-    <color name="BS_text_color">#000000</color>
-    <color name="BB_text_color">#000000</color>
-    <color name="FGN_text_color">#000000</color>
-    <color name="YM_text_color">#000000</color>
-    <color name="MV_text_color">#000000</color>
-    <color name="PM_text_color">#000000</color>
-
-    <color name="tab_text_color">#3C3A3A</color>
-    <color name="privacy_text_color">#3C3A3A</color>
+    <color name="SDS_text_color">#FFFFFF</color>
+    <color name="SBL_text_color">#FFFFFF</color>
+    <color name="SPT_text_color">#FFFFFF</color>
+    <color name="BS_text_color">#FFFFFF</color>
+    <color name="BB_text_color">#FFFFFF</color>
+    <color name="FGN_text_color">#FFFFFF</color>
+    <color name="YM_text_color">#FFFFFF</color>
+    <color name="MV_text_color">#FFFFFF</color>
+    <color name="PM_text_color">#FFFFFF</color>
+    <color name="tab_text_color">#313030</color>
+    <color name="privacy_text_color">#313030</color>
 </resources>

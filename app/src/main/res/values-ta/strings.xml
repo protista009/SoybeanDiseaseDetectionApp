@@ -48,7 +48,7 @@
     <string name="powdery_mildew">பவுடரி மில்டியு</string>
     <string name="septoria">செப்டோரியா</string>
 
-    <string name="no_soyabean_leaf_detected">சோயா இலை கண்டறியப்படவில்லை</string>
+    <string name="no_soyabean_leaf_detected">சோயாபீன் இலை கண்டுபிடிக்கப்படவில்லை. இலை பகுதி அல்லது நோய் தெளிவாக தெரியப்படுமாறு படத்தை வெட்டவும்.</string>
 
     <string name="healthy_soyabean_leaf">ஆரோக்கியமான சோயா இலை</string>
     <string name="disease_detected">கண்டறியப்பட்ட நோய்: </string>

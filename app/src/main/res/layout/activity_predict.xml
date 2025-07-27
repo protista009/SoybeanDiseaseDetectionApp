@@ -14,6 +14,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+
         <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,6 +25,94 @@
             android:minHeight="?attr/actionBarSize"
             app:title="@string/app_name"
             app:titleTextColor="@android:color/white" />
+
+        <LinearLayout
+            android:id="@+id/headerInfoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:background="#FFFFFF"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!-- Row 1: Temp (left), Date/Time (right) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Temperature (left aligned) -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_temp" />
+
+                    <TextView
+                        android:id="@+id/tvTemperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loading"
+                        android:textColor="#2E7D32"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- Date/Time (right aligned) -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_clock"
+                         />
+
+                    <TextView
+                        android:id="@+id/tvDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="27 Jul 2025, 10:25 AM"
+                        android:textColor="#2E7D32"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 2: Location (left aligned only) -->
+            <LinearLayout
+                android:layout_width="395dp"
+                android:layout_height="30dp"
+                android:gravity="start|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_location" />
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading"
+                    android:textColor="#2E7D32"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <!-- Main Content Scroll -->
         <ScrollView
@@ -35,13 +125,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp"
+                android:padding="10dp"
                 android:gravity="center_horizontal">
 
                 <!-- Image Box -->
                 <FrameLayout
-                    android:layout_width="300dp"
-                    android:layout_height="300dp"
+                    android:layout_width="280dp"
+                    android:layout_height="280dp"
                     android:background="@android:color/white"
                     android:elevation="6dp"
                     android:layout_marginTop="20dp">
@@ -63,7 +153,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/result_placeholder"
                     android:textColor="#2E7D32"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="italic" />
 
                 <!-- Confidence Text -->
@@ -88,26 +178,31 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCapture"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="57dp"
                     android:layout_marginTop="24dp"
                     android:backgroundTint="#2E7D32"
                     android:text="@string/capture_image"
                     android:textColor="@android:color/white"
+                    android:textSize="16sp"
                     app:icon="@drawable/camera_alt"
                     app:iconPadding="10dp"
+                    app:iconSize="28dp"
                     app:iconTint="@android:color/white" />
 
                 <!-- Select Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSelect"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="57dp"
                     android:layout_marginTop="16dp"
                     android:backgroundTint="#2E7D32"
                     android:text="@string/select_from_gallery"
                     android:textColor="@android:color/white"
+                    android:textSize="16sp"
                     app:icon="@drawable/gallery"
                     app:iconPadding="10dp"
+
+                    app:iconSize="28dp"
                     app:iconTint="@android:color/white" />
 
                 <!-- Analyze Button -->

@@ -55,7 +55,7 @@
 
 
         //leaf detction
-        <string name="no_soyabean_leaf_detected">No Soyabean Leaf Detected</string>
+        <string name="no_soyabean_leaf_detected">No Soyabean Leaf Detected.\n Please crop the image such that leaf area or disease is visible properly</string>
 
         <string name="healthy_soyabean_leaf">Healthy Soyabean Leaf</string>
         <string name="disease_detected">Disease Detected: </string>
@@ -91,7 +91,7 @@ Your use of the Application is governed by the following terms and conditions as
 
         <string name="Privacy_Policy_Content">Privacy and Data Protection
 Please review Our Privacy Policy, which also governs Your use, access and visits to this Application. The personal information / data provided to Us by You during the course of usage of the Application and use of Your Account will be treated as confidential and in accordance with the Privacy Policy and applicable laws and regulations. If You object to Your information being transferred or used in the manner as specified under the Privacy Policy, please do not use the Application. The Company may also transfer this information to third parties where required to do so by law or upon request from governmental, judicial, regulatory or statutory agencies or authorities.</string>
-
+        <string name="loading" >Loading</string>
 
 
 </resources>
