@@ -48,7 +48,7 @@
     <string name="powdery_mildew">పౌడరీ మిల్డ్యూ</string>
     <string name="septoria">సెప్టోరియా</string>
 
-    <string name="no_soyabean_leaf_detected">సోయా ఆకులు కనబడలేదు</string>
+    <string name="no_soyabean_leaf_detected">సోయాబీన్ ఆకును కనుగొనలేకపోయాము. దయచేసి ఆకు భాగం లేదా వ్యాధి స్పష్టంగా కనిపించేలా చిత్రాన్ని క్రాప్ చేయండి.</string>
 
     <string name="healthy_soyabean_leaf">ఆరోగ్యంగా ఉన్న సోయా ఆకులు</string>
     <string name="disease_detected">గుర్తించిన వ్యాధి: </string>

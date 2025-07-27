@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_sudden_death"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/SDS_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
 
@@ -161,7 +161,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_bacterial_blight"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+
+                        android:textColor="@color/SBL_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -211,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_septoria"
                        android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/SPT_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -263,7 +264,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_brown_spot"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/BS_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -313,7 +314,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_bacterial_blight"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/BB_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -365,7 +366,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_ferrugen"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/FGN_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -416,7 +417,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_yellow_mosaic"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/YM_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -466,7 +467,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_mosaic_virus"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/MV_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
@@ -516,7 +517,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/desc_powdery_mildew"
                         android:textSize="14sp"
-                        android:textColor="#444444"
+                        android:textColor="@color/PM_text_color"
                         android:visibility="gone"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
