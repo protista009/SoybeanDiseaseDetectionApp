@@ -47,15 +47,17 @@
         <string name="sudden_death_syndrome">Sudden Death Syndrome</string>
         <string name="yellow_mosaic">Yellow Mosaic</string>
         <string name="bacterial_blight">Bacterial blight</string>
-        <string name="brown_spot">Brown spot</string>
         <string name="crestamento">Crestamento</string>
         <string name="ferrugen">Ferrugen</string>
+        <string name="brown_spot">Brown spot</string>
+        <string name="unlabeled">unlabeled</string>
+        <string name="caterpillar">caterpillar</string>
         <string name="powdery_mildew">Powdery mildew</string>
         <string name="septoria">Septoria</string>
 
 
         //leaf detction
-        <string name="no_soyabean_leaf_detected">No Soyabean Leaf Detected.\n Please crop the image such that leaf area or disease is visible properly</string>
+        <string name="no_soyabean_leaf_detected">No Soyabean Leaf Detected.\nPlease crop the image such that leaf area or disease is visible properly</string>
 
         <string name="healthy_soyabean_leaf">Healthy Soyabean Leaf</string>
         <string name="disease_detected">Disease Detected: </string>

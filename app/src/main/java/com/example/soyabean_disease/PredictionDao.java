@@ -20,4 +20,3 @@ public interface PredictionDao {
     void clearAll(); // just one delete method is enough
 }
 
-

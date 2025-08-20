@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 
 // Add if using Firebase
 
@@ -19,6 +20,13 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     splits {
         abi {
@@ -44,14 +52,9 @@ android {
         noCompress("tflite")
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+
+
 
     buildFeatures {
         viewBinding = true
@@ -71,11 +74,28 @@ dependencies {
 
     implementation(libs.room.common.jvm)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.tflite.gpu)
+
+//    implementation(libs.litert.gpu)
+    //implementation(libs.litert.support.api)
+   // implementation(libs.play.services.tflite.gpu)
+//    implementation(libs.litert.gpu)
     val room_version = "2.5.2"  // or latest stable
 
 
+
+
+        // ... your other dependencies
+
+        implementation ("com.github.bumptech.glide:glide:4.16.0")
+         kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+
+
+
+
     implementation ("androidx.room:room-runtime:$room_version")
-    annotationProcessor ("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
 // For Kotlin (optional)
     implementation ("androidx.transition:transition:1.4.1")
@@ -88,11 +108,16 @@ dependencies {
     // Choose ONE of these TensorFlow Lite implementations (not both):
 
     // OPTION 1: Official TensorFlow Lite
-    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
+    implementation ("org.tensorflow:tensorflow-lite-gpu:2.14.0")
 
-    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
-    implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
-     implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.14.0") // Only if needed
+    implementation ("org.tensorflow:tensorflow-lite-gpu-api:2.14.0")
+
+    val tfliteVersion = ("2.14.0")
+    implementation ("org.tensorflow:tensorflow-lite:$tfliteVersion")
+
+    implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:$tfliteVersion")
+//    // Only if needed
 
     // OR OPTION 2: Google's LiteRT (comment out the above if using this)
 //     implementation("com.google.ai.edge.litert:litert:1.0.1")

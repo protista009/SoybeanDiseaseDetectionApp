@@ -1,16 +1,16 @@
 package com.example.soyabean_disease;
 
-
 import android.Manifest;
+
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,14 +23,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
-import android.content.Intent;
-
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.soyabean_disease.AboutActivity;
+import com.example.soyabean_disease.HistoryActivity;
+import com.example.soyabean_disease.LegalNotices;
+import com.example.soyabean_disease.LocaleHelper;
+import com.example.soyabean_disease.MainActivity;
+import com.example.soyabean_disease.NonNull;
+import com.example.soyabean_disease.PredictionDatabase;
+import com.example.soyabean_disease.PredictionEntry;
+import com.example.soyabean_disease.R;
+import com.example.soyabean_disease.WeatherResponse;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+
+
+
+import org.tensorflow.lite.gpu.GpuDelegate;  // Correct import for TFLite GPU delegate
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -43,9 +55,10 @@ import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+
 import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.common.FileUtil;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,8 +75,6 @@ import java.util.Locale;
 import java.util.PriorityQueue;
 
 
-import com.example.soyabean_disease.WeatherResponse;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,29 +88,54 @@ public class PredictActivity extends AppCompatActivity {
     private static final float NMS_THRESHOLD = 0.5f;
     private static final float HEALTH_THRESHOLD = 0.4f;
 
+    private String[] diseaseClasses;
+
     private ImageView imageView;
-    private Button btnCapture, btnSelect, btnAnalyze;
+    private Button btnCapture, btnSelect;
     private TextView tvResult, tvConfidence;
     private ProgressBar progressBar;
 
     private Bitmap currentBitmap;
+    private Interpreter diseaseModel;
     private Interpreter yoloModel;
+
     private Uri tempCameraUri;
     private Toolbar toolbar;
-    private Interpreter diseaseModel;
 
-    private String[] diseaseClasses;
+
+
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
     private ActionBarDrawerToggle toggle;
 
+    private Interpreter interpreter;
+
+
     private float noLeafConfidence = 0.0f;
 
 
 
-    private final int DISEASE_INPUT_SIZE = 224; // Assuming standard MobileNetV2 input size
 
+
+
+    // --- Inference config ---
+    private static final int YOLO_INPUT = 640;
+    private static final int YOLO_OUTPUT_BOXES = 25200; // your model
+    private static final int YOLO_OUTPUT_ATTR = 7;      // [x,y,w,h,obj,class0,class1]
+
+    // Delegates & options
+    private GpuDelegate gpuDelegate;
+    private Interpreter.Options yoloOptions;
+    private Interpreter.Options clsOptions;
+
+    // Reusable buffers to avoid GC churn
+    private ByteBuffer yoloInputBuffer;
+    private int[] yoloPixels = new int[YOLO_INPUT * YOLO_INPUT];
+
+    private final int DISEASE_INPUT_SIZE = 224;
+    private ByteBuffer clsInputBuffer;
+    private int[] clsPixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
 
 
 
@@ -263,25 +299,32 @@ public class PredictActivity extends AppCompatActivity {
         initializeViews();
         setupListeners();
         loadModels();
-
         diseaseClasses = new String[]{
-                getString(R.string.mosaic_virus),
-                getString(R.string.southern_blight),
-                getString(R.string.sudden_death_syndrome),
+                getString(R.string.caterpillar),
                 getString(R.string.yellow_mosaic),
-                getString(R.string.bacterial_blight),
-                getString(R.string.brown_spot),
-                getString(R.string.crestamento),
-                getString(R.string.ferrugen),
-                getString(R.string.powdery_mildew),
-                getString(R.string.septoria)
         };
+
+//        diseaseClasses = new String[]{
+//                getString(R.string.mosaic_virus),
+//                getString(R.string.southern_blight),
+//                getString(R.string.sudden_death_syndrome),
+//                getString(R.string.yellow_mosaic),
+//                getString(R.string.bacterial_blight),
+//                getString(R.string.brown_spot),
+//                getString(R.string.crestamento),
+//                getString(R.string.ferrugen),
+//                getString(R.string.powdery_mildew),
+//                getString(R.string.septoria)
+//        };
+
+
+
 
 
     }
 
 
-        private void showLanguageDialog() {
+    private void showLanguageDialog() {
         final String[] languages = {"English", "Hindi","Gujarati","Tamil","Telugu"};
         final String[] codes = {"en", "hi","gu","ta","te"};
 
@@ -357,39 +400,53 @@ public class PredictActivity extends AppCompatActivity {
     }
 
     private void loadModels() {
-        Interpreter.Options options = null;
+        // Create model options (GPU first, then fall back to CPU/XNNPACK if GPU fails)
         try {
-            options = new Interpreter.Options();
-            options.setNumThreads(4);
-            options.setUseXNNPACK(true);
-            yoloModel = new Interpreter(loadModel("soybean_model_yolo.tflite"), options);
-        } catch (Exception e) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Model Load Error")
-                    .setMessage("Failed to load TFLite model.")
-                    .setPositiveButton("Exit", (dialog, which) -> finish())
-                    .setCancelable(false)
-                    .show();
-
-        }
-        try {
-            options = new Interpreter.Options();
-            options.setNumThreads(4);
-            options.setUseXNNPACK(true);
-            diseaseModel = new Interpreter(loadModel("soybean_model.tflite"), options);
-        } catch (Exception e) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Model Load Error")
-                    .setMessage("Failed to load TFLite model.")
-                    .setPositiveButton("Exit", (dialog, which) -> finish())
-                    .setCancelable(false)
-                    .show();
-
+            gpuDelegate = new GpuDelegate();
+            yoloOptions = new Interpreter.Options().addDelegate(gpuDelegate);
+            yoloOptions.setNumThreads(Runtime.getRuntime().availableProcessors());
+            clsOptions = new Interpreter.Options().addDelegate(gpuDelegate);
+            clsOptions.setNumThreads(Runtime.getRuntime().availableProcessors());
+        } catch (Throwable t) {
+            Log.w("TFLite", "GPU delegate not available, falling back to CPU", t);
+            yoloOptions = new Interpreter.Options();
+            clsOptions = new Interpreter.Options();
+            yoloOptions.setUseXNNPACK(true);
+            clsOptions.setUseXNNPACK(true);
+            yoloOptions.setNumThreads(4);
+            clsOptions.setNumThreads(4);
         }
 
+        try {
+            yoloModel = new Interpreter(loadModel("best-fp167.tflite"), yoloOptions);
+        } catch (Exception e) {
+            Log.e("ModelLoad", "Failed to init YOLO model", e);
+            showModelError("Failed to load leaf detector model.");
+            return;
+        }
 
+        try {
+            diseaseModel = new Interpreter(loadModel("mobilenetv2_model.tflite"), clsOptions);
+        } catch (Exception e) {
+            Log.e("ModelLoad", "Failed to init classifier model", e);
+            showModelError("Failed to load disease classification model.");
+            return;
+        }
 
+        // Allocate reusable direct buffers once
+        yoloInputBuffer = ByteBuffer.allocateDirect(YOLO_INPUT * YOLO_INPUT * 3 * 4).order(ByteOrder.nativeOrder());
+        clsInputBuffer = ByteBuffer.allocateDirect(DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE * 3 * 4).order(ByteOrder.nativeOrder());
     }
+
+    private void showModelError(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Model Load Error")
+                .setMessage(message)
+                .setPositiveButton("Exit", (dialog, which) -> finish())
+                .setCancelable(false)
+                .show();
+    }
+
 
     private void analyzeImage() {
         progressBar.setVisibility(View.VISIBLE);
@@ -397,12 +454,14 @@ public class PredictActivity extends AppCompatActivity {
         tvConfidence.setText("");
 
         new Thread(() -> {
-            Detection detection = detectLeafAndClassify();
+            Detection detection = detectLeafAndClassify(currentBitmap);
 
             if (detection == null) {
                 runOnUiThread(() -> {
                     tvResult.setText(getString(R.string.no_soyabean_leaf_detected));
                     tvResult.setTextColor(Color.RED);
+
+
                     savePredictionToRoom(getString(R.string.no_soyabean_leaf_detected), noLeafConfidence);
                     resetUI();
                 });
@@ -415,32 +474,38 @@ public class PredictActivity extends AppCompatActivity {
                         if (detection.confidence > HEALTH_THRESHOLD) {
                             tvResult.setText(getString(R.string.healthy_soyabean_leaf));
                             tvResult.setTextColor(Color.GREEN);
+
                             savePredictionToRoom(getString(R.string.healthy_soyabean_leaf), detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+
                             savePredictionToRoom(getString(R.string.uncertain), detection.confidence);
                         }
                         break;
 
-                    case 2: // Unhealthy
+                    case 1: // Unhealthy
                         if (detection.confidence > 0.3f) {
                             Bitmap cropped = cropDetection(currentBitmap, detection.box);
                             String diseaseName = classifyDisease(cropped); // 👈 secondary model
                             tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName);
                             tvResult.setTextColor(Color.RED);
+
                             savePredictionToRoom(diseaseName, detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+
+
                             savePredictionToRoom(getString(R.string.uncertain), detection.confidence);
                         }
                         break;
 
-                    case 1: // Not leaf
+
                     default:
                         tvResult.setText(getString(R.string.no_soyabean_leaf_detected));
                         tvResult.setTextColor(Color.RED);
+
                         savePredictionToRoom(getString(R.string.no_soyabean_leaf_detected), detection.confidence);
                         break;
                 }
@@ -476,170 +541,203 @@ public class PredictActivity extends AppCompatActivity {
             return "";
         }
     }
-    public static ByteBuffer convertBitmapToByteBuffer(Bitmap bitmap) {
-        int inputSize = 640; // Fixed internally
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(inputSize * inputSize * 3 * 4);
-        byteBuffer.order(ByteOrder.nativeOrder());
+    private void fillYoloInputBuffer(Bitmap src) {
+        // Resize into a temporary 640x640 bitmap
+        Bitmap resized = Bitmap.createScaledBitmap(src, YOLO_INPUT, YOLO_INPUT, true);
+        resized.getPixels(yoloPixels, 0, YOLO_INPUT, 0, 0, YOLO_INPUT, YOLO_INPUT);
 
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, true);
-        int[] pixels = new int[inputSize * inputSize];
-        resizedBitmap.getPixels(pixels, 0, inputSize, 0, 0, inputSize, inputSize);
-
-        for (int pixel : pixels) {
-            byteBuffer.putFloat(((pixel >> 16) & 0xFF) / 255.0f); // Red
-            byteBuffer.putFloat(((pixel >> 8) & 0xFF) / 255.0f);  // Green
-            byteBuffer.putFloat((pixel & 0xFF) / 255.0f);         // Blue
+        yoloInputBuffer.rewind();
+        for (int p : yoloPixels) {
+            // Normalize 0..1 floats
+            yoloInputBuffer.putFloat(((p >> 16) & 0xFF) / 255.0f); // R
+            yoloInputBuffer.putFloat(((p >> 8) & 0xFF) / 255.0f);  // G
+            yoloInputBuffer.putFloat((p & 0xFF) / 255.0f);         // B
         }
-
-        return byteBuffer;
     }
-    private Bitmap cropDetection(Bitmap bitmap, float[] box) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
 
-        int left = Math.max(0, (int) (box[0] * width / 640));
-        int top = Math.max(0, (int) (box[1] * height / 640));
-        int right = Math.min(width, (int) (box[2] * width / 640));
-        int bottom = Math.min(height, (int) (box[3] * height / 640));
+    private Bitmap cropDetection(Bitmap bitmap, RectF box) {
+        int left = Math.max(0, (int) box.left);
+        int top = Math.max(0, (int) box.top);
+        int right = Math.min(bitmap.getWidth(), (int) box.right);
+        int bottom = Math.min(bitmap.getHeight(), (int) box.bottom);
 
         int cropWidth = right - left;
         int cropHeight = bottom - top;
 
         if (cropWidth <= 0 || cropHeight <= 0) {
             Log.e("CropDetection", "Invalid crop size: " + cropWidth + "x" + cropHeight);
-            return bitmap; // Fallback to entire image if box is invalid
+            return bitmap; // Fallback to full image
         }
 
         return Bitmap.createBitmap(bitmap, left, top, cropWidth, cropHeight);
     }
 
 
-    private String classifyDisease(Bitmap croppedLeaf) {
-        Bitmap resized = Bitmap.createScaledBitmap(croppedLeaf, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE, true);
-        ByteBuffer inputBuffer = ByteBuffer.allocateDirect(4 * DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE * 3);
-        inputBuffer.order(ByteOrder.nativeOrder());
+//    private String classifyDisease(Bitmap croppedLeaf) {
+//        Bitmap resized = Bitmap.createScaledBitmap(croppedLeaf, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE, true);
+//        ByteBuffer inputBuffer = ByteBuffer.allocateDirect(4 * DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE * 3);
+//        inputBuffer.order(ByteOrder.nativeOrder());
+//
+//        int[] pixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
+//        resized.getPixels(pixels, 0, DISEASE_INPUT_SIZE, 0, 0, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE);
+//
+//        for (int pixel : pixels) {
+//            inputBuffer.putFloat(((pixel >> 16) & 0xFF) / 255.0f);
+//            inputBuffer.putFloat(((pixel >> 8) & 0xFF) / 255.0f);
+//            inputBuffer.putFloat((pixel & 0xFF) / 255.0f);
+//        }
+//
+//        float[][] output = new float[1][diseaseClasses.length];
+//        diseaseModel.run(inputBuffer, output);
+//
+//        // Apply softmax
+//        float sum = 0f;
+//        for (float val : output[0]) sum += Math.exp(val);
+//        for (int i = 0; i < output[0].length; i++) output[0][i] = (float) Math.exp(output[0][i]) / sum;
+//
+//        // Find best class
+//        int bestIndex = 0;
+//        float bestScore = output[0][0];
+//        for (int i = 1; i < output[0].length; i++) {
+//            if (output[0][i] > bestScore) {
+//                bestScore = output[0][i];
+//                bestIndex = i;
+//            }
+//        }
+//
+//        Log.d("DiseasePrediction", "Best: " + diseaseClasses[bestIndex] + ", Prob: " + bestScore);
+//        return diseaseClasses[bestIndex];
+//    }
+private String classifyDisease(Bitmap croppedLeaf) {
+    Bitmap resized = Bitmap.createScaledBitmap(croppedLeaf, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE, true);
+    resized.getPixels(clsPixels, 0, DISEASE_INPUT_SIZE, 0, 0, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE);
 
-        int[] pixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
-        resized.getPixels(pixels, 0, DISEASE_INPUT_SIZE, 0, 0, DISEASE_INPUT_SIZE, DISEASE_INPUT_SIZE);
-
-        for (int pixel : pixels) {
-            inputBuffer.putFloat(((pixel >> 16) & 0xFF) / 255.0f);
-            inputBuffer.putFloat(((pixel >> 8) & 0xFF) / 255.0f);
-            inputBuffer.putFloat((pixel & 0xFF) / 255.0f);
-        }
-
-        float[][] output = new float[1][diseaseClasses.length];
-        diseaseModel.run(inputBuffer, output);
-
-        // Apply softmax
-        float sum = 0f;
-        for (float val : output[0]) sum += Math.exp(val);
-        for (int i = 0; i < output[0].length; i++) output[0][i] = (float) Math.exp(output[0][i]) / sum;
-
-        // Find best class
-        int bestIndex = 0;
-        float bestScore = output[0][0];
-        for (int i = 1; i < output[0].length; i++) {
-            if (output[0][i] > bestScore) {
-                bestScore = output[0][i];
-                bestIndex = i;
-            }
-        }
-
-        Log.d("DiseasePrediction", "Best: " + diseaseClasses[bestIndex] + ", Prob: " + bestScore);
-        return diseaseClasses[bestIndex];
+    clsInputBuffer.rewind();
+    for (int p : clsPixels) {
+        clsInputBuffer.putFloat(((p >> 16) & 0xFF) / 255.0f);
+        clsInputBuffer.putFloat(((p >> 8) & 0xFF) / 255.0f);
+        clsInputBuffer.putFloat((p & 0xFF) / 255.0f);
     }
 
-    private Detection detectLeafAndClassify() {
-        try {
-            Bitmap resized = Bitmap.createScaledBitmap(currentBitmap, 640, 640, true);
-            ByteBuffer input = convertBitmapToByteBuffer(resized);
+    float[][] output = new float[1][2]; // two classes in your current setup
+    diseaseModel.run(clsInputBuffer, output);
 
-            float[][][] output = new float[1][25200][8];  // updated: 8 values per prediction
-            yoloModel.run(input, output);
+    // Softmax + argmax
+    float a = (float)Math.exp(output[0][0]);
+    float b = (float)Math.exp(output[0][1]);
+    float sum = a + b;
+    float p0 = a / sum, p1 = b / sum;
+    int bestIdx = (p1 > p0) ? 1 : 0;
+    float bestProb = (bestIdx == 1) ? p1 : p0;
 
-            List<Detection> detections = new ArrayList<>();
-            float maxConfidenceSeen = 0.0f;
+    Log.d("DiseasePrediction", "Best: " + diseaseClasses[bestIdx] + ", Prob: " + bestProb);
+    return diseaseClasses[bestIdx];
+}
 
-            for (float[] pred : output[0]) {
-                float x = pred[0];
-                float y = pred[1];
-                float w = pred[2];
-                float h = pred[3];
-                float objectness = pred[4];
 
-                // Softmax across 3 classes
-                float[] classScores = new float[3];
-                float expSum = 0f;
-                for (int i = 0; i < 3; i++) {
-                    classScores[i] = (float) Math.exp(pred[5 + i]);
-                    expSum += classScores[i];
-                }
-                for (int i = 0; i < 3; i++) {
-                    classScores[i] /= expSum;
-                }
+    private Detection detectLeafAndClassify(Bitmap original) {
+        // 1) Preprocess (fills yoloInputBuffer)
+        fillYoloInputBuffer(original);
 
-                // Find best class
-                int classId = 0;
-                float classProb = classScores[0];
-                for (int i = 1; i < 3; i++) {
-                    if (classScores[i] > classProb) {
-                        classProb = classScores[i];
-                        classId = i;
-                    }
-                }
+        // 2) Inference
+        float[][][] yoloOutput = new float[1][YOLO_OUTPUT_BOXES][YOLO_OUTPUT_ATTR];
+        yoloModel.run(yoloInputBuffer, yoloOutput);
 
-                float confidence = objectness * classProb;
-                if (confidence > maxConfidenceSeen) {
-                    maxConfidenceSeen = confidence;
-                }
+        // 3) Find best detection (you can swap in NMS if you want multiple)
+        float bestScore = 0f;
+        int bestClassId = -1;
+        RectF bestBox640 = null;
 
-                if (confidence > YOLO_CONFIDENCE_THRESHOLD) {
-                    float[] box = {
-                            x - w / 2, y - h / 2,
-                            x + w / 2, y + h / 2
-                    };
-                    detections.add(new Detection(box, confidence, classId));
-                }
+        for (int i = 0; i < YOLO_OUTPUT_BOXES; i++) {
+            float[] p = yoloOutput[0][i];
+
+            float cx = p[0];
+            float cy = p[1];
+            float w  = p[2];
+            float h  = p[3];
+            float obj = p[4];
+
+            float s0 = p[5]; // healthy
+            float s1 = p[6]; // unhealthy
+
+            // class with max score
+            int classId = (s1 > s0) ? 1 : 0;
+            float classScore = Math.max(s0, s1);
+            float score = obj * classScore;
+
+            if (score < YOLO_CONFIDENCE_THRESHOLD) continue;
+
+            // box in 640x640 space (your model outputs normalized 0..1 or absolute?)
+            // If normalized (0..1), multiply by 640; if already absolute, skip the multiply.
+            // Most TFLite YOLO heads export normalized — so multiply:
+            float cx640 = cx * YOLO_INPUT;
+            float cy640 = cy * YOLO_INPUT;
+            float w640  = w  * YOLO_INPUT;
+            float h640  = h  * YOLO_INPUT;
+
+            float left   = cx640 - w640 / 2f;
+            float top    = cy640 - h640 / 2f;
+            float right  = cx640 + w640 / 2f;
+            float bottom = cy640 + h640 / 2f;
+
+            // Clamp to 640x640
+            left = Math.max(0, Math.min(YOLO_INPUT - 1, left));
+            top = Math.max(0, Math.min(YOLO_INPUT - 1, top));
+            right = Math.max(0, Math.min(YOLO_INPUT - 1, right));
+            bottom = Math.max(0, Math.min(YOLO_INPUT - 1, bottom));
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestClassId = classId;
+                bestBox640 = new RectF(left, top, right, bottom);
             }
-
-            List<Detection> finalDetections = applyNMS(detections);
-            if (!finalDetections.isEmpty()) {
-                return finalDetections.get(0); // Return best detection
-            }
-            noLeafConfidence = maxConfidenceSeen;
-
-        } catch (Exception e) {
-            Log.e("YOLO", "Detection error", e);
         }
-        return null;
+
+        if (bestBox640 == null) return null;
+
+        // 4) Map 640x640 box back to original size
+        float scaleX = (float) original.getWidth() / YOLO_INPUT;
+        float scaleY = (float) original.getHeight() / YOLO_INPUT;
+        RectF mapped = new RectF(
+                bestBox640.left * scaleX,
+                bestBox640.top * scaleY,
+                bestBox640.right * scaleX,
+                bestBox640.bottom * scaleY
+        );
+
+        return new Detection(mapped, bestClassId, bestScore);
     }
+
 
 
     private List<Detection> applyNMS(List<Detection> detections) {
         List<Detection> result = new ArrayList<>();
-        PriorityQueue<Detection> pq = new PriorityQueue<>((a, b) -> Float.compare(b.confidence, a.confidence));
+        PriorityQueue<Detection> pq = new PriorityQueue<>((a, b) -> Float.compare(b.getConfidence(), a.getConfidence()));
         pq.addAll(detections);
 
         while (!pq.isEmpty()) {
             Detection curr = pq.poll();
             result.add(curr);
             detections.remove(curr);
-            detections.removeIf(d -> iou(curr.box, d.box) > NMS_THRESHOLD);
+            detections.removeIf(d -> iou(curr.getBox(), d.getBox()) > NMS_THRESHOLD);
         }
         return result;
     }
 
-    private float iou(float[] a, float[] b) {
-        float x1 = Math.max(a[0], b[0]);
-        float y1 = Math.max(a[1], b[1]);
-        float x2 = Math.min(a[2], b[2]);
-        float y2 = Math.min(a[3], b[3]);
-        float inter = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
-        float areaA = (a[2] - a[0]) * (a[3] - a[1]);
-        float areaB = (b[2] - b[0]) * (b[3] - b[1]);
-        return inter / (areaA + areaB - inter);
+
+    private float iou(RectF a, RectF b) {
+        float x1 = Math.max(a.left, b.left);
+        float y1 = Math.max(a.top, b.top);
+        float x2 = Math.min(a.right, b.right);
+        float y2 = Math.min(a.bottom, b.bottom);
+
+        float interArea = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
+        float areaA = (a.right - a.left) * (a.bottom - a.top);
+        float areaB = (b.right - b.left) * (b.bottom - b.top);
+
+        return interArea / (areaA + areaB - interArea);
     }
+
 
     private @NonNull MappedByteBuffer loadModel(String name) throws IOException {
         return FileUtil.loadMappedFile(this, name);
@@ -666,16 +764,33 @@ public class PredictActivity extends AppCompatActivity {
     private void showToast(String msg) {
         runOnUiThread(() -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
     }
-
-    private static class Detection {
-        float[] box;
-        float confidence;
-        int classId;
-
-        Detection(float[] box, float confidence, int classId) {
-            this.box = box;
-            this.confidence = confidence;
-            this.classId = classId;
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try { if (yoloModel != null) yoloModel.close(); } catch (Throwable ignored) {}
+        try { if (diseaseModel != null) diseaseModel.close(); } catch (Throwable ignored) {}
+        try { if (gpuDelegate != null) gpuDelegate.close(); } catch (Throwable ignored) {}
     }
+
+
+
+    public class Detection {
+        private RectF box;
+        private float confidence;
+        private int classId;
+
+        public Detection(RectF box, int classId, float confidence) {
+            this.box = box;
+            this.classId = classId;
+            this.confidence = confidence;
+        }
+
+        public RectF getBox() { return box; }
+        public float getConfidence() { return confidence; }
+        public int getClassId() { return classId; }
+    }
+
+
 }
+
+
