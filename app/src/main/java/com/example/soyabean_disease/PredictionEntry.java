@@ -10,6 +10,7 @@ public class PredictionEntry {
 
     public int id;
     public String imagePath;
+
     public String result;
     public float confidence;
     public long timestamp;
@@ -17,6 +18,8 @@ public class PredictionEntry {
     public PredictionEntry(String imagePath, String result, float confidence, long timestamp) {
         this.imagePath = imagePath;
         this.result = result;
+
+
         this.confidence = confidence;
         this.timestamp = timestamp;
     }

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -73,6 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.PriorityQueue;
+import java.util.concurrent.Executors;
 
 
 import retrofit2.Call;
@@ -157,16 +159,23 @@ public class PredictActivity extends AppCompatActivity {
 
 
     private void launchCropper(Uri imageUri) {
-        CropImageOptions options = new CropImageOptions();
-        options.fixAspectRatio = true;
-        options.aspectRatioX = 1;
-        options.aspectRatioY = 1;
-        cropImageLauncher.launch(new CropImageContractOptions(imageUri, options));
+        CropImageOptions cropOptions = new CropImageOptions();
+        cropOptions.activityTitle="Edit Image";
+        cropOptions.cropMenuCropButtonTitle="Done";
+        cropOptions.fixAspectRatio = true;
+        cropOptions.aspectRatioX = 1;
+        cropOptions.aspectRatioY = 1;
+
+        CropImageContractOptions options = new CropImageContractOptions(imageUri, cropOptions);
+
+        cropImageLauncher.launch(options);
     }
+
 
 
     private final ActivityResultLauncher<CropImageContractOptions> cropImageLauncher =
             registerForActivityResult(new CropImageContract(), result -> {
+
                 if (result.isSuccessful()) {
                     try {
                         currentBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result.getUriContent());
@@ -216,94 +225,77 @@ public class PredictActivity extends AppCompatActivity {
     }
 
     FusedLocationProviderClient fusedLocationClient;
+    private ProgressBar loadingSpinner;
+
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_predict);
 
+        // Toolbar + Drawer setup
+        setupToolbarAndDrawer();
 
-        // Set up Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
+        // Views
         TextView tvTemperature = findViewById(R.id.tvTemperature);
         TextView tvDate = findViewById(R.id.tvDate);
         TextView tvTime = findViewById(R.id.tvTime);
         TextView tvLocation = findViewById(R.id.tvLocation);
+        loadingSpinner = findViewById(R.id.loadingSpinner); // add this in layout
 
-        // Set current date and time
+        // Show current date & time immediately
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        tvDate.setText(sdfDate.format(new Date()));
+        tvTime.setText(sdfTime.format(new Date()));
 
-        String currentDate = sdfDate.format(new Date());
-        String currentTime = sdfTime.format(new Date());
-
-        tvDate.setText(currentDate);
-        tvTime.setText(currentTime);
+        // ✅ Load weather after UI is ready
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fetchWeatherAsync(tvTemperature, tvLocation);
 
+        // ✅ Load ML models in background
+        showLoadingSpinner();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            loadModels();  // heavy operation
+            runOnUiThread(() -> {
+                hideLoadingSpinner();
+                Toast.makeText(this, "loaded!", Toast.LENGTH_SHORT).show();
+            });
+        });
+
+        // Disease classes (just strings, safe to set here)
+        diseaseClasses = new String[]{
+                getString(R.string.caterpillar),
+                getString(R.string.yellow_mosaic)
+        };
+    }
+
+    private void hideLoadingSpinner() {
+        if (loadingSpinner != null) loadingSpinner.setVisibility(View.GONE);
+    }
+
+    private void showLoadingSpinner() {
+        if (loadingSpinner != null) loadingSpinner.setVisibility(View.VISIBLE);
+    }
+
+
+    private void fetchWeatherAsync(TextView tvTemperature, TextView tvLocation) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
 
-        // ✅ This part only fetches weather on location success
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
-                        fetchWeather(location.getLatitude(), location.getLongitude(), tvTemperature, tvLocation);
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            fetchWeather(location.getLatitude(), location.getLongitude(), tvTemperature, tvLocation);
+                        });
                     }
                 });
-
-        // Set up DrawerLayout and NavigationView
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navView = findViewById(R.id.nav_view);
-
-        // Toggle (Hamburger icon)
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // Optional: Handle drawer item clicks
-        navView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.nav_home) {
-                startActivity(new Intent(this, MainActivity.class));
-            } else if (id == R.id.nav_predict) {
-                // Already on PredictActivity
-            } else if (id == R.id.nav_history) {
-                startActivity(new Intent(PredictActivity.this, HistoryActivity.class));
-            } else if (id == R.id.nav_about) {
-                startActivity(new Intent(this, AboutActivity.class));
-            }
-            else if (id == R.id.nav_legal) {
-                startActivity(new Intent(this, LegalNotices.class));
-            }
-            else if (id == R.id.nav_language) {
-                showLanguageDialog();
-            }
-            drawerLayout.closeDrawers();
-            return true;
-
-
-        });
-        initializeViews();
-        setupListeners();
-        loadModels();
-        diseaseClasses = new String[]{
-                getString(R.string.caterpillar),
-                getString(R.string.yellow_mosaic),
-        };
-
 //        diseaseClasses = new String[]{
 //                getString(R.string.mosaic_virus),
 //                getString(R.string.southern_blight),
@@ -318,10 +310,47 @@ public class PredictActivity extends AppCompatActivity {
 //        };
 
 
-
+        initializeViews();
+        setupListeners();
 
 
     }
+
+    private void setupToolbarAndDrawer() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                startActivity(new Intent(this, MainActivity.class));
+            } else if (id == R.id.nav_predict) {
+                // already here
+            } else if (id == R.id.nav_history) {
+                startActivity(new Intent(PredictActivity.this, HistoryActivity.class));
+            } else if (id == R.id.nav_about) {
+                startActivity(new Intent(this, AboutActivity.class));
+            } else if (id == R.id.nav_legal) {
+                startActivity(new Intent(this, LegalNotices.class));
+            } else if (id == R.id.nav_language) {
+                showLanguageDialog();
+            }
+            drawerLayout.closeDrawers();
+
+            return true;
+        });
+    }
+
 
 
     private void showLanguageDialog() {
@@ -453,13 +482,17 @@ public class PredictActivity extends AppCompatActivity {
         tvResult.setText("Analyzing...");
         tvConfidence.setText("");
 
+
         new Thread(() -> {
             Detection detection = detectLeafAndClassify(currentBitmap);
 
             if (detection == null) {
                 runOnUiThread(() -> {
-                    tvResult.setText(getString(R.string.no_soyabean_leaf_detected));
+                    tvResult.setText(getString(R.string.no_soyabean_leaf_detected)
+                            + "\n"
+                            + getString(R.string.desclaimer));
                     tvResult.setTextColor(Color.RED);
+
 
 
                     savePredictionToRoom(getString(R.string.no_soyabean_leaf_detected), noLeafConfidence);
@@ -475,10 +508,12 @@ public class PredictActivity extends AppCompatActivity {
                             tvResult.setText(getString(R.string.healthy_soyabean_leaf));
                             tvResult.setTextColor(Color.GREEN);
 
+
                             savePredictionToRoom(getString(R.string.healthy_soyabean_leaf), detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+
 
                             savePredictionToRoom(getString(R.string.uncertain), detection.confidence);
                         }
@@ -491,10 +526,13 @@ public class PredictActivity extends AppCompatActivity {
                             tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName);
                             tvResult.setTextColor(Color.RED);
 
+
                             savePredictionToRoom(diseaseName, detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+
+
 
 
                             savePredictionToRoom(getString(R.string.uncertain), detection.confidence);
@@ -503,8 +541,11 @@ public class PredictActivity extends AppCompatActivity {
 
 
                     default:
-                        tvResult.setText(getString(R.string.no_soyabean_leaf_detected));
+                        tvResult.setText(getString(R.string.no_soyabean_leaf_detected)
+                                + "\n"
+                                + getString(R.string.desclaimer));
                         tvResult.setTextColor(Color.RED);
+
 
                         savePredictionToRoom(getString(R.string.no_soyabean_leaf_detected), detection.confidence);
                         break;
@@ -519,6 +560,7 @@ public class PredictActivity extends AppCompatActivity {
     private void savePredictionToRoom(String result, float confidence) {
         String imagePath = saveBitmapToInternalStorage(currentBitmap);
         long timestamp = System.currentTimeMillis();
+
 
         PredictionEntry entry = new PredictionEntry(imagePath, result, confidence, timestamp);
 

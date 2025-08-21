@@ -47,16 +47,7 @@ public class HistoryActivity extends AppCompatActivity {
         loadHistoryFromDatabase();
     }
 
-    private void loadLocale() {
-        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-        String savedLang = prefs.getString("My_Lang", "en");
-        String currentLang = Locale.getDefault().getLanguage();
 
-        if (!currentLang.equals(savedLang)) {
-            LocaleHelper.setLocale(this, savedLang);
-            recreate();
-        }
-    }
 
     private void loadHistoryFromDatabase() {
         new Thread(() -> {
