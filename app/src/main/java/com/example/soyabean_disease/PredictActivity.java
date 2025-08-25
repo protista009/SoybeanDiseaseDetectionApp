@@ -12,8 +12,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.location.Location;
+
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -39,11 +43,18 @@ import com.example.soyabean_disease.PredictionEntry;
 import com.example.soyabean_disease.R;
 import com.example.soyabean_disease.WeatherResponse;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+
 
 
 
 import org.tensorflow.lite.gpu.GpuDelegate;  // Correct import for TFLite GPU delegate
+
+
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -95,6 +106,8 @@ public class PredictActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button btnCapture, btnSelect;
     private TextView tvResult, tvConfidence;
+
+    private TextView tvTemperature, tvLocation;
     private ProgressBar progressBar;
 
     private Bitmap currentBitmap;
@@ -212,6 +225,7 @@ public class PredictActivity extends AppCompatActivity {
                     WeatherResponse data = response.body();
                     tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", data.main.temp));
                     tvLocation.setText(data.name);
+
                 } else {
                     Toast.makeText(PredictActivity.this, "Weather data unavailable", Toast.LENGTH_SHORT).show();
                 }
@@ -270,6 +284,9 @@ public class PredictActivity extends AppCompatActivity {
                 getString(R.string.caterpillar),
                 getString(R.string.yellow_mosaic)
         };
+
+        initializeViews();
+        setupListeners();
     }
 
     private void hideLoadingSpinner() {
@@ -280,41 +297,63 @@ public class PredictActivity extends AppCompatActivity {
         if (loadingSpinner != null) loadingSpinner.setVisibility(View.VISIBLE);
     }
 
-
     private void fetchWeatherAsync(TextView tvTemperature, TextView tvLocation) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
 
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
+                        // ✅ Cached location available
                         Executors.newSingleThreadExecutor().execute(() -> {
                             fetchWeather(location.getLatitude(), location.getLongitude(), tvTemperature, tvLocation);
                         });
+                    } else {
+                        LocationRequest locationRequest;
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            // ✅ Android 12+ (API 31 and above)
+                            locationRequest = new LocationRequest.Builder(10000L) // interval
+                                    .setMinUpdateIntervalMillis(5000L) // fastest interval
+                                    .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                                    .build();
+                        } else {
+                            // ✅ Older versions
+                            locationRequest = LocationRequest.create()
+                                    .setInterval(10000L)
+                                    .setFastestInterval(5000L)
+                                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                        }
+
+                        fusedLocationClient.requestLocationUpdates(
+                                locationRequest,
+                                new LocationCallback() {
+                                    @Override
+                                    public void onLocationResult(LocationResult locationResult) {
+                                        if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                                            Location freshLocation = locationResult.getLastLocation();
+
+                                            Executors.newSingleThreadExecutor().execute(() -> {
+                                                fetchWeather(freshLocation.getLatitude(),
+                                                        freshLocation.getLongitude(),
+                                                        tvTemperature, tvLocation);
+                                            });
+
+                                            // ✅ Stop updates after first fix
+                                            fusedLocationClient.removeLocationUpdates(this);
+                                        }
+                                    }
+                                },
+                                Looper.getMainLooper()
+                        );
                     }
                 });
-//        diseaseClasses = new String[]{
-//                getString(R.string.mosaic_virus),
-//                getString(R.string.southern_blight),
-//                getString(R.string.sudden_death_syndrome),
-//                getString(R.string.yellow_mosaic),
-//                getString(R.string.bacterial_blight),
-//                getString(R.string.brown_spot),
-//                getString(R.string.crestamento),
-//                getString(R.string.ferrugen),
-//                getString(R.string.powdery_mildew),
-//                getString(R.string.septoria)
-//        };
-
-
-        initializeViews();
-        setupListeners();
-
-
     }
+
 
     private void setupToolbarAndDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -375,10 +414,6 @@ public class PredictActivity extends AppCompatActivity {
     }
 
 
-    private void setLocale(String langCode) {
-        LocaleHelper.setLocale(this, langCode);
-        recreate();
-    }
 
 
 
@@ -794,6 +829,8 @@ public class PredictActivity extends AppCompatActivity {
 
     private void resetUI() {
         progressBar.setVisibility(View.GONE);
+
+
         //btnAnalyze.setEnabled(true);
     }
 

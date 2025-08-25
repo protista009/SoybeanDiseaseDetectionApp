@@ -49,7 +49,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 .centerCrop()
                 .into(holder.historyImage);
 
-        holder.historyResult.setText(context.getString(R.string.result) + "\n" + entry.result);
+        holder.historyResult.setText(String.format(Locale.US,context.getString(R.string.result) + "\n" + entry.result));
 
         String formattedTime = new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
                 .format(new Date(entry.timestamp));
