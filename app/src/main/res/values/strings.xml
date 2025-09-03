@@ -57,11 +57,11 @@
 
 
         //leaf detection
-        <string name="no_soyabean_leaf_detected">No Soyabean Leaf Detected.</string>
+        <string name="no_soyabean_leaf_detected">No Soybean Leaf Detected.</string>
         <string name="desclaimer">Please crop the image such that leaf area or disease is visible properly.</string>
 
 
-        <string name="healthy_soyabean_leaf">Healthy Soyabean Leaf</string>
+        <string name="healthy_soyabean_leaf">Healthy Soybean Leaf</string>
         <string name="disease_detected">Disease Detected: </string>
 
 

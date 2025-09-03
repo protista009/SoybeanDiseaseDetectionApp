@@ -221,10 +221,10 @@
                     android:id="@+id/tvConfidence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text=""
-                    android:textColor="#555555"
-                    android:textSize="14sp"
-                    android:layout_marginTop="4dp" />
+                    android:textColor="#2E7D32"
+                    android:textSize="17sp" />
 
                 <!-- Progress -->
                 <ProgressBar

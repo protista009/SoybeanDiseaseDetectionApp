@@ -2,6 +2,7 @@ package com.example.soyabean_disease;
 
 import android.Manifest;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,7 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.graphics.Typeface;
+
 import android.location.Location;
 
 import android.net.Uri;
@@ -32,16 +33,7 @@ import android.view.MenuItem;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.soyabean_disease.AboutActivity;
-import com.example.soyabean_disease.HistoryActivity;
-import com.example.soyabean_disease.LegalNotices;
-import com.example.soyabean_disease.LocaleHelper;
-import com.example.soyabean_disease.MainActivity;
-import com.example.soyabean_disease.NonNull;
-import com.example.soyabean_disease.PredictionDatabase;
-import com.example.soyabean_disease.PredictionEntry;
-import com.example.soyabean_disease.R;
-import com.example.soyabean_disease.WeatherResponse;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -107,7 +99,7 @@ public class PredictActivity extends AppCompatActivity {
     private Button btnCapture, btnSelect;
     private TextView tvResult, tvConfidence;
 
-    private TextView tvTemperature, tvLocation;
+
     private ProgressBar progressBar;
 
     private Bitmap currentBitmap;
@@ -115,19 +107,15 @@ public class PredictActivity extends AppCompatActivity {
     private Interpreter yoloModel;
 
     private Uri tempCameraUri;
-    private Toolbar toolbar;
 
 
 
-
-    private DrawerLayout drawerLayout;
-    private NavigationView navView;
     private ActionBarDrawerToggle toggle;
 
-    private Interpreter interpreter;
 
 
-    private float noLeafConfidence = 0.0f;
+
+    private final float noLeafConfidence = 0.0f;
 
 
 
@@ -141,16 +129,14 @@ public class PredictActivity extends AppCompatActivity {
 
     // Delegates & options
     private GpuDelegate gpuDelegate;
-    private Interpreter.Options yoloOptions;
-    private Interpreter.Options clsOptions;
 
     // Reusable buffers to avoid GC churn
     private ByteBuffer yoloInputBuffer;
-    private int[] yoloPixels = new int[YOLO_INPUT * YOLO_INPUT];
+    private final int[] yoloPixels = new int[YOLO_INPUT * YOLO_INPUT];
 
     private final int DISEASE_INPUT_SIZE = 224;
     private ByteBuffer clsInputBuffer;
-    private int[] clsPixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
+    private final int[] clsPixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
 
 
 
@@ -220,7 +206,7 @@ public class PredictActivity extends AppCompatActivity {
         Call<WeatherResponse> call = api.getWeather(lat, lon, apiKey, "metric", userLang);
         call.enqueue(new Callback<WeatherResponse>() {
             @Override
-            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+            public void onResponse(@androidx.annotation.NonNull Call<WeatherResponse> call, @androidx.annotation.NonNull Response<WeatherResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WeatherResponse data = response.body();
                     tvTemp.setText(String.format(Locale.getDefault(), "%.1f°C", data.main.temp));
@@ -232,7 +218,7 @@ public class PredictActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+            public void onFailure(@androidx.annotation.NonNull Call<WeatherResponse> call, @androidx.annotation.NonNull Throwable t) {
                 Toast.makeText(PredictActivity.this, "Weather fetch failed", Toast.LENGTH_SHORT).show();
             }
         });
@@ -333,11 +319,12 @@ public class PredictActivity extends AppCompatActivity {
                                 locationRequest,
                                 new LocationCallback() {
                                     @Override
-                                    public void onLocationResult(LocationResult locationResult) {
-                                        if (locationResult != null && !locationResult.getLocations().isEmpty()) {
+                                    public void onLocationResult(@androidx.annotation.NonNull LocationResult locationResult) {
+                                        if (!locationResult.getLocations().isEmpty()) {
                                             Location freshLocation = locationResult.getLastLocation();
 
                                             Executors.newSingleThreadExecutor().execute(() -> {
+                                                assert freshLocation != null;
                                                 fetchWeather(freshLocation.getLatitude(),
                                                         freshLocation.getLongitude(),
                                                         tvTemperature, tvLocation);
@@ -374,7 +361,7 @@ public class PredictActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 startActivity(new Intent(this, MainActivity.class));
             } else if (id == R.id.nav_predict) {
-                // already here
+                startActivity(new Intent(PredictActivity.this, PredictActivity.class));
             } else if (id == R.id.nav_history) {
                 startActivity(new Intent(PredictActivity.this, HistoryActivity.class));
             } else if (id == R.id.nav_about) {
@@ -420,7 +407,7 @@ public class PredictActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@androidx.annotation.NonNull @NonNull MenuItem item) {
         return toggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
@@ -433,9 +420,7 @@ public class PredictActivity extends AppCompatActivity {
         tvConfidence = findViewById(R.id.tvConfidence);
         progressBar = findViewById(R.id.progressBar);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navView = findViewById(R.id.nav_view);
+
 
     }
 
@@ -465,6 +450,8 @@ public class PredictActivity extends AppCompatActivity {
 
     private void loadModels() {
         // Create model options (GPU first, then fall back to CPU/XNNPACK if GPU fails)
+        Interpreter.Options clsOptions;
+        Interpreter.Options yoloOptions;
         try {
             gpuDelegate = new GpuDelegate();
             yoloOptions = new Interpreter.Options().addDelegate(gpuDelegate);
@@ -512,6 +499,7 @@ public class PredictActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void analyzeImage() {
         progressBar.setVisibility(View.VISIBLE);
         tvResult.setText("Analyzing...");
@@ -527,6 +515,10 @@ public class PredictActivity extends AppCompatActivity {
                             + "\n"
                             + getString(R.string.desclaimer));
                     tvResult.setTextColor(Color.RED);
+                    tvConfidence.setTextColor(Color.RED);
+
+
+
 
 
 
@@ -542,12 +534,18 @@ public class PredictActivity extends AppCompatActivity {
                         if (detection.confidence > HEALTH_THRESHOLD) {
                             tvResult.setText(getString(R.string.healthy_soyabean_leaf));
                             tvResult.setTextColor(Color.GREEN);
+                            tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
+                            tvConfidence.setTextColor(Color.GREEN);
+
 
 
                             savePredictionToRoom(getString(R.string.healthy_soyabean_leaf), detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+                            tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
+                            tvConfidence.setTextColor(Color.YELLOW);
+
 
 
                             savePredictionToRoom(getString(R.string.uncertain), detection.confidence);
@@ -560,12 +558,18 @@ public class PredictActivity extends AppCompatActivity {
                             String diseaseName = classifyDisease(cropped); // 👈 secondary model
                             tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName);
                             tvResult.setTextColor(Color.RED);
+                            tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
+                            tvConfidence.setTextColor(Color.RED);
+
 
 
                             savePredictionToRoom(diseaseName, detection.confidence);
                         } else {
                             tvResult.setText(getString(R.string.uncertain));
                             tvResult.setTextColor(Color.YELLOW);
+                            tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
+                            tvConfidence.setTextColor(Color.YELLOW);
+
 
 
 
@@ -580,6 +584,8 @@ public class PredictActivity extends AppCompatActivity {
                                 + "\n"
                                 + getString(R.string.desclaimer));
                         tvResult.setTextColor(Color.RED);
+                        tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
+                        tvConfidence.setTextColor(Color.RED);
 
 
                         savePredictionToRoom(getString(R.string.no_soyabean_leaf_detected), detection.confidence);
@@ -599,11 +605,9 @@ public class PredictActivity extends AppCompatActivity {
 
         PredictionEntry entry = new PredictionEntry(imagePath, result, confidence, timestamp);
 
-        new Thread(() -> {
-            PredictionDatabase.getInstance(PredictActivity.this)
-                    .predictionDao()
-                    .insert(entry);
-        }).start();
+        new Thread(() -> PredictionDatabase.getInstance(PredictActivity.this)
+                .predictionDao()
+                .insert(entry)).start();
     }
     private String saveBitmapToInternalStorage(Bitmap bitmap) {
         try {
@@ -796,7 +800,10 @@ public class PredictActivity extends AppCompatActivity {
             Detection curr = pq.poll();
             result.add(curr);
             detections.remove(curr);
-            detections.removeIf(d -> iou(curr.getBox(), d.getBox()) > NMS_THRESHOLD);
+            detections.removeIf(d -> {
+                assert curr != null;
+                return iou(curr.getBox(), d.getBox()) > NMS_THRESHOLD;
+            });
         }
         return result;
     }
@@ -853,10 +860,10 @@ public class PredictActivity extends AppCompatActivity {
 
 
 
-    public class Detection {
-        private RectF box;
-        private float confidence;
-        private int classId;
+    public static class Detection {
+        private final RectF box;
+        private final float confidence;
+        private final int classId;
 
         public Detection(RectF box, int classId, float confidence) {
             this.box = box;
