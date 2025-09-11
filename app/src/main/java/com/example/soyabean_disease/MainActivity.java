@@ -38,20 +38,22 @@ public class MainActivity extends AppCompatActivity {
             recreate(); // only recreate if language changed
         }
     }
-    private void expandCardForDisease(String diseaseName) {
+    private void expandCardForDisease(String diseaseKey) {
         int cardId = -1;
         int descId = -1;
 
-        switch (diseaseName.toLowerCase()) {
-            case "sudden death":
+        switch (diseaseKey) {
+            case PredictActivity.DiseaseKeys.SUDDEN_DEATH:
                 cardId = R.id.card_sudden_death;
                 descId = R.id.desc_sudden_death;
                 break;
-            case "yellow mosaic":
-                cardId = R.id.card_yellow_mossaic;
+
+            case PredictActivity.DiseaseKeys.YELLOW_MOSAIC:
+                cardId = R.id.card_yellow_mossaic; // be careful spelling!
                 descId = R.id.desc_yellow_mossaic;
                 break;
-            case "caterpillar":
+
+            case PredictActivity.DiseaseKeys.CATERPILLAR:
                 cardId = R.id.card_caterpillar;
                 descId = R.id.desc_caterpillar;
                 break;
@@ -67,14 +69,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String selectedDisease = getIntent().getStringExtra("disease_name");
-        if (selectedDisease != null) {
-            expandCardForDisease(selectedDisease);
+        String diseaseKey = getIntent().getStringExtra("disease_key");
+        if (diseaseKey != null) {
+            expandCardForDisease(diseaseKey);
         }
+
 
 
 
