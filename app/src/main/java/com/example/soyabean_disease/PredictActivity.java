@@ -74,8 +74,10 @@ import java.util.Date;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.concurrent.Executors;
 
@@ -97,7 +99,7 @@ public class PredictActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private Button btnCapture, btnSelect;
-    private TextView tvResult, tvConfidence;
+    private TextView tvResult, tvConfidence,tvShowPrecautions;
 
 
     private ProgressBar progressBar;
@@ -108,18 +110,15 @@ public class PredictActivity extends AppCompatActivity {
 
     private Uri tempCameraUri;
 
-
-
     private ActionBarDrawerToggle toggle;
-
-
-
 
     private final float noLeafConfidence = 0.0f;
 
-
-
-
+    public class DiseaseKeys {
+        public static final String SUDDEN_DEATH = "sudden_death";
+        public static final String YELLOW_MOSAIC = "yellow_mosaic";
+        public static final String CATERPILLAR = "caterpillar";
+    }
 
 
     // --- Inference config ---
@@ -137,7 +136,7 @@ public class PredictActivity extends AppCompatActivity {
     private final int DISEASE_INPUT_SIZE = 224;
     private ByteBuffer clsInputBuffer;
     private final int[] clsPixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
-    private Button btnShowPrecautions;
+
 
 
 
@@ -171,6 +170,33 @@ public class PredictActivity extends AppCompatActivity {
 
         cropImageLauncher.launch(options);
     }
+    // At the top of PredictActivity (as a field, so you can use it anywhere in the class)
+    private final Map<String, String> diseaseMap = new HashMap<String, String>() {{
+        // English
+        put("Sudden Death Syndrome", DiseaseKeys.SUDDEN_DEATH);
+        put("Yellow Mosaic", DiseaseKeys.YELLOW_MOSAIC);
+        put("Caterpillar", DiseaseKeys.CATERPILLAR);
+
+        // Hindi
+        put("सडन डेथ सिंड्रोम", DiseaseKeys.SUDDEN_DEATH);
+        put("येलो मोज़ेक", DiseaseKeys.YELLOW_MOSAIC);
+        put("कैटरपिलर", DiseaseKeys.CATERPILLAR);
+
+        // Gujarati
+        put("સડન ડેથ સિન્ડ્રોમ", DiseaseKeys.SUDDEN_DEATH);
+        put("યેલો મોઝેઈક", DiseaseKeys.YELLOW_MOSAIC);
+        put("ઈયળ", DiseaseKeys.CATERPILLAR);
+
+        // Tamil
+        put("சடுமுடிவு நோய்", DiseaseKeys.SUDDEN_DEATH);
+        put("மஞ்சள் மோசைக்", DiseaseKeys.YELLOW_MOSAIC);
+        put("இலைத்தின்னி", DiseaseKeys.CATERPILLAR);
+
+        // Telugu
+        put("సడెన్ డెత్ సిండ్రోమ్", DiseaseKeys.SUDDEN_DEATH);
+        put("యెలో మోసాయిక్", DiseaseKeys.YELLOW_MOSAIC);
+        put("పురుగు", DiseaseKeys.CATERPILLAR);
+    }};
 
 
 
@@ -241,7 +267,9 @@ public class PredictActivity extends AppCompatActivity {
         setupToolbarAndDrawer();
 
         // Views
+
         TextView tvTemperature = findViewById(R.id.tvTemperature);
+        TextView tvShowPrecautions = findViewById(R.id.tvShowPrecautions);
         TextView tvDate = findViewById(R.id.tvDate);
         TextView tvTime = findViewById(R.id.tvTime);
         TextView tvLocation = findViewById(R.id.tvLocation);
@@ -426,8 +454,8 @@ public class PredictActivity extends AppCompatActivity {
         tvResult = findViewById(R.id.tvResult);
         tvConfidence = findViewById(R.id.tvConfidence);
         progressBar = findViewById(R.id.progressBar);
-        btnShowPrecautions = findViewById(R.id.btnShowPrecautions);
-        btnShowPrecautions.setVisibility(View.GONE);
+        tvShowPrecautions = findViewById(R.id.tvShowPrecautions);
+        tvShowPrecautions.setVisibility(View.GONE);
 
 
 
@@ -572,14 +600,19 @@ public class PredictActivity extends AppCompatActivity {
                             tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
                             tvConfidence.setTextColor(Color.RED);
 
-                            btnShowPrecautions.setVisibility(View.VISIBLE);
+                            tvShowPrecautions.setVisibility(View.VISIBLE);
 
                             // Handle button click
-                            btnShowPrecautions.setOnClickListener(v -> {
+                            // ✅ Map diseaseName → constant key
+                            String diseaseKey = diseaseMap.getOrDefault(diseaseName, "unknown");
+
+                            String finalDiseaseKey = diseaseKey;
+                            tvShowPrecautions.setOnClickListener(v -> {
                                 Intent intent = new Intent(PredictActivity.this, MainActivity.class);
-                                intent.putExtra("disease_name", diseaseName);
+                                intent.putExtra("disease_key", finalDiseaseKey);
                                 startActivity(intent);
                             });
+
 
                             savePredictionToRoom(diseaseName, detection.confidence);
                         } else {
@@ -616,9 +649,6 @@ public class PredictActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void showPrecautions(String diseaseName) {
-
-    }
 
     private void savePredictionToRoom(String result, float confidence) {
         String imagePath = saveBitmapToInternalStorage(currentBitmap);
