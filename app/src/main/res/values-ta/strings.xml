@@ -13,6 +13,8 @@
     <string name="History">வரலாறு</string>
     <string name="Language">மொழி</string>
     <string name="Clear_History">வரலாற்றை அழிக்கவும்</string>
+    <string name="Show_Precautions" >முன்னெச்சரிக்கை மற்றும் தீர்வுகள்</string>
+
 
     <!-- Titles -->
     <string name="sudden_death_title">சடுமுடிவு நோய்</string>
@@ -24,18 +26,23 @@
     <string name="yellow_mosaic_title">மஞ்சள் மோசைக்</string>
     <string name="mosaic_virus_title">மோசைக் வைரஸ்</string>
     <string name="powdery_mildew_title">பவுடரி மில்டியு</string>
+    <string name="caterpillar_title">இலைத்தின்னி</string>
 
     <!-- Descriptions -->
-    <string name="desc_sudden_death">SDS என்பது பாசிப்பட்டைகள், பழுப்பு மற்றும் இலை இறப்பை ஏற்படுத்தும் பூஞ்சை நோயாகும்.</string>
+    <string name="desc_sudden_death">SDS என்பது பாசிப்பட்டைகள், பழுப்பு மற்றும் இலை இறப்பை ஏற்படுத்தும் பூஞ்சை நோயாகும்.\n\nஎச்சரிக்கைகள்:\n• எதிர்ப்பு திறன் கொண்ட வகைகளை பயிரிடவும்\n• வயலில் நீர் வடிகால் வசதி செய்யவும்\n• அயல் பயிர்களுடன் பயிர் சுழற்சி செய்யவும்\n• குளிரான மற்றும் ஈரமான நிலத்தில் விதைப்பதை தவிர்க்கவும்
+\n\nமேலாண்மை:\n• பூஞ்சைநாசினி விதை சிகிச்சை செய்யவும்\n• சோயாபீன் நெமட்டோடை கட்டுப்படுத்தவும்\n• மண் ஆரோக்கியத்தை பராமரிக்கவும்</string>
     <string name="desc_southern_blight">இது இலை மஞ்சள் ஆகி தண்டு அடியில் வெள்ளை பூஞ்சை வளர்ச்சி ஏற்படுகிறது.</string>
     <string name="desc_septoria">இது இழை இலைகளில் பழுப்பு புள்ளிகளை ஏற்படுத்துகிறது.</string>
     <string name="desc_brown_spot">பொதுவான பூஞ்சை நோய்; சிறிய பழுப்பு புள்ளிகள் ஏற்படும்.</string>
     <string name="desc_bacterial_blight">பாக்டீரியா காரணமாக வெள்ளை புள்ளிகள் பிறகு பழுப்பாக மாறும்.</string>
     <string name="desc_ferrugen">பழுப்பு புள்ளிகள் மற்றும் நன்கு ஈரப்பதத்தில் குறைந்த விளைச்சல்.</string>
-    <string name="desc_yellow_mosaic">இலைகளில் மஞ்சள் புள்ளிகள் மற்றும் மோசைக் வடிவங்கள்.</string>
+    <string name="desc_yellow_mosaic">இலைகளில் மஞ்சள் புள்ளிகள் மற்றும் மோசைக் வடிவங்கள்.\n\nஎச்சரிக்கைகள்:\n• எதிர்ப்பு திறன் கொண்ட வகைகளை வளர்க்கவும்\n• வெள்ளை ஈக்களை கண்காணித்து கட்டுப்படுத்தவும்\n• பாதிக்கப்பட்ட தாவரங்களை உடனடியாக அகற்றவும்
+\n\nமேலாண்மை:\n• வேப்பெண்ணெய் அல்லது பரிந்துரைக்கப்பட்ட பூச்சிக்கொல்லிகளைத் தெளிக்கவும்\n• வயலை களைகளிலிருந்து சுத்தமாக வைத்திருக்கவும்\n• அபாயத்தை குறைக்க விதைப்பு நேரத்தை மாற்றவும்</string>
     <string name="desc_mosaic_virus">மஞ்சள்-பச்சை வடிவங்கள் ஏற்படும், வளர்ச்சியை பாதிக்கிறது.</string>
     <string name="desc_powdery_mildew">இலை மேல் வெள்ளை தூள் போல பூஞ்சை வளர்ச்சி.</string>
-
+    <string name="desc_caterpillar">பூச்சிகள் (இலைத்தின்னிகள்) சோயாபீன் இலைகளை தின்று துளைகள் ஏற்படுத்துகின்றன, இதனால் விளைச்சல் குறைகிறது.
+\n\nஎச்சரிக்கைகள்:\n• வயலை தொடர்ந்து கண்காணிக்கவும்\n• இயற்கை எதிரிகளை (பறவைகள், பயனுள்ள பூச்சிகள்) ஊக்குவிக்கவும்\n• ஆரம்பத்திலேயே கண்டறிய பெரோமோன் வலைகளைப் பயன்படுத்தவும்
+\n\nமேலாண்மை:\n• ஆரம்ப நிலையிலேயே பூச்சிகளை கையால் அகற்றவும்\n• பாசில்லஸ் துரிஞ்சியென்சிஸ் (Bt) பயன்படுத்தவும்\n• கடுமையான தாக்குதலில் மட்டுமே பூச்சிக்கொல்லிகளைப் பயன்படுத்தவும்</string>
     <!-- Names -->
     <string name="mosaic_virus">மோசைக் வைரஸ்</string>
     <string name="southern_blight">தெற்கு பிளைட்</string>
@@ -45,8 +52,9 @@
     <string name="brown_spot">பிரவுன் ஸ்பாட்</string>
     <string name="crestamento">கிரெஸ்டமென்டோ</string>
     <string name="ferrugen">பெருஜன்</string>
+    <string name="frog_eye">பிராக் ஐ நோய்</string>
     <string name="powdery_mildew">பவுடரி மில்டியு</string>
-    <string name="septoria">செப்டோரியா</string>
+    <string name="caterpillar">இலைத்தின்னி</string>
 
     <string name="no_soyabean_leaf_detected">சோயாபீன் இலை கண்டுபிடிக்கப்படவில்லை.</string>
     <string name="desclaimer"> இலை பகுதி அல்லது நோய் தெளிவாக தெரியப்படுமாறு படத்தை வெட்டவும்.</string>

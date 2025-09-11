@@ -38,25 +38,59 @@ public class MainActivity extends AppCompatActivity {
             recreate(); // only recreate if language changed
         }
     }
+    private void expandCardForDisease(String diseaseName) {
+        int cardId = -1;
+        int descId = -1;
 
+        switch (diseaseName.toLowerCase()) {
+            case "sudden death":
+                cardId = R.id.card_sudden_death;
+                descId = R.id.desc_sudden_death;
+                break;
+            case "yellow mosaic":
+                cardId = R.id.card_yellow_mossaic;
+                descId = R.id.desc_yellow_mossaic;
+                break;
+            case "caterpillar":
+                cardId = R.id.card_caterpillar;
+                descId = R.id.desc_caterpillar;
+                break;
+        }
+
+        if (cardId != -1 && descId != -1) {
+            CardView card = findViewById(cardId);
+            TextView descView = findViewById(descId);
+
+            if (card != null && descView != null) {
+                TransitionManager.beginDelayedTransition(card);
+                descView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String selectedDisease = getIntent().getStringExtra("disease_name");
+        if (selectedDisease != null) {
+            expandCardForDisease(selectedDisease);
+        }
 
 
 
 
         int[] cardIds = {
                 R.id.card_sudden_death,
-                R.id.card_septoria,
-                R.id.card_southern_blight,
                 R.id.card_yellow_mossaic,
-                R.id.card_mossaic_virus,
-                R.id.card_powdery_mildew,
-                R.id.card_ferrugen,
-                R.id.card_bacterial_blight,
-                R.id.card_brown_spot
+                R.id.card_caterpillar
+//                R.id.card_septoria,
+//                R.id.card_southern_blight,
+//
+//                R.id.card_mossaic_virus,
+//                R.id.card_powdery_mildew,
+//                R.id.card_ferrugen,
+//                R.id.card_bacterial_blight,
+//                R.id.card_brown_spot
         };
 
 

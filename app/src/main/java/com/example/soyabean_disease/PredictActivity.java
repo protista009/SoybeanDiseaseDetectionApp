@@ -137,6 +137,8 @@ public class PredictActivity extends AppCompatActivity {
     private final int DISEASE_INPUT_SIZE = 224;
     private ByteBuffer clsInputBuffer;
     private final int[] clsPixels = new int[DISEASE_INPUT_SIZE * DISEASE_INPUT_SIZE];
+    private Button btnShowPrecautions;
+
 
 
 
@@ -268,7 +270,12 @@ public class PredictActivity extends AppCompatActivity {
         // Disease classes (just strings, safe to set here)
         diseaseClasses = new String[]{
                 getString(R.string.caterpillar),
-                getString(R.string.yellow_mosaic)
+                getString(R.string.sudden_death_syndrome),
+                getString(R.string.yellow_mosaic),
+//                getString(R.string.brown_spot),
+//                getString(R.string.frog_eye),
+//                getString(R.string.powdery_mildew),
+
         };
 
         initializeViews();
@@ -419,6 +426,8 @@ public class PredictActivity extends AppCompatActivity {
         tvResult = findViewById(R.id.tvResult);
         tvConfidence = findViewById(R.id.tvConfidence);
         progressBar = findViewById(R.id.progressBar);
+        btnShowPrecautions = findViewById(R.id.btnShowPrecautions);
+        btnShowPrecautions.setVisibility(View.GONE);
 
 
 
@@ -426,6 +435,8 @@ public class PredictActivity extends AppCompatActivity {
 
 
     private void setupListeners() {
+
+
 
         btnCapture.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -477,7 +488,7 @@ public class PredictActivity extends AppCompatActivity {
         }
 
         try {
-            diseaseModel = new Interpreter(loadModel("mobilenetv2_model.tflite"), clsOptions);
+            diseaseModel = new Interpreter(loadModel("mobilenetv2_model2.tflite"), clsOptions);
         } catch (Exception e) {
             Log.e("ModelLoad", "Failed to init classifier model", e);
             showModelError("Failed to load disease classification model.");
@@ -556,12 +567,19 @@ public class PredictActivity extends AppCompatActivity {
                         if (detection.confidence > 0.3f) {
                             Bitmap cropped = cropDetection(currentBitmap, detection.box);
                             String diseaseName = classifyDisease(cropped); // 👈 secondary model
-                            tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName);
+                            tvResult.setText(getString(R.string.disease_detected) + "\n" + diseaseName ) ;
                             tvResult.setTextColor(Color.RED);
                             tvConfidence.setText(String.format("Confidence: %.2f%%", detection.confidence * 100));
                             tvConfidence.setTextColor(Color.RED);
 
+                            btnShowPrecautions.setVisibility(View.VISIBLE);
 
+                            // Handle button click
+                            btnShowPrecautions.setOnClickListener(v -> {
+                                Intent intent = new Intent(PredictActivity.this, MainActivity.class);
+                                intent.putExtra("disease_name", diseaseName);
+                                startActivity(intent);
+                            });
 
                             savePredictionToRoom(diseaseName, detection.confidence);
                         } else {
@@ -596,6 +614,10 @@ public class PredictActivity extends AppCompatActivity {
             });
 
         }).start();
+    }
+
+    private void showPrecautions(String diseaseName) {
+
     }
 
     private void savePredictionToRoom(String result, float confidence) {
@@ -700,16 +722,24 @@ public class PredictActivity extends AppCompatActivity {
             clsInputBuffer.putFloat((p & 0xFF) / 255.0f);
         }
 
-        float[][] output = new float[1][2]; // two classes in your current setup
+        float[][] output = new float[1][3]; // two classes in your current setup
         diseaseModel.run(clsInputBuffer, output);
 
         // Softmax + argmax
-        float a = (float)Math.exp(output[0][0]);
-        float b = (float)Math.exp(output[0][1]);
-        float sum = a + b;
-        float p0 = a / sum, p1 = b / sum;
-        int bestIdx = (p1 > p0) ? 1 : 0;
-        float bestProb = (bestIdx == 1) ? p1 : p0;
+        float sum = 0f;
+        for (int i = 0; i < 3; i++) {
+            sum += Math.exp(output[0][i]);
+        }
+
+        int bestIdx = 0;
+        float bestProb = 0f;
+        for (int i = 0; i < 3; i++) {
+            float prob = (float) Math.exp(output[0][i]) / sum;
+            if (prob > bestProb) {
+                bestProb = prob;
+                bestIdx = i;
+            }
+        }
 
         Log.d("DiseasePrediction", "Best: " + diseaseClasses[bestIdx] + ", Prob: " + bestProb);
         return diseaseClasses[bestIdx];

@@ -13,6 +13,7 @@
     <string name="History">చరిత్ర</string>
     <string name="Language">భాష</string>
     <string name="Clear_History">చరిత్రను తొలగించు</string>
+    <string name="Show_Precautions" >జాగ్రత్తలు మరియు పరిష్కారాలు</string>
 
     <!-- Titles -->
     <string name="sudden_death_title">సడెన్ డెత్ సిండ్రోమ్</string>
@@ -24,17 +25,25 @@
     <string name="yellow_mosaic_title">యెలో మోసాయిక్</string>
     <string name="mosaic_virus_title">మోసాయిక్ వైరస్</string>
     <string name="powdery_mildew_title">పౌడరీ మిల్డ్యూ</string>
+    <string name="caterpillar_title">పురుగు</string>
 
     <!-- Descriptions -->
-    <string name="desc_sudden_death">SDS ఒక ఫంగల్ వ్యాధి, ఆకులలో పసుపు, బ్రౌన్ కలర్ మరియు మరణానికి కారణం.</string>
+    <string name="desc_sudden_death">SDS ఒక ఫంగల్ వ్యాధి, ఆకులలో పసుపు, బ్రౌన్ కలర్ మరియు మరణానికి కారణం.\n\nజాగ్రత్తలు:\n• నిరోధక రకాలను నాటండి\n• పొలంలో నీటి పారుదల మెరుగుపరచండి\n• గౌణ పంటలతో పంటల మార్పిడి చేయండి\n• చల్లని మరియు తడి నేలలో విత్తనాన్ని నివారించండి
+\n\nనిర్వహణ:\n• ఫంగిసైడ్ విత్తన శుద్ధి చేయండి\n• సోయాబీన్ నిమటోడ్‌ను నియంత్రించండి\n• నేల ఆరోగ్యం కాపాడండి</string>
     <string name="desc_southern_blight">భూమిలో ఉండే ఫంగల్ వ్యాధి; ఆకులు మురుగు, కాండం వద్ద తెల్లగా పూసును ఏర్పరుస్తుంది.</string>
     <string name="desc_septoria">సెప్టోరియా బ్రౌన్ స్పాట్ క్రింది ఆకులపై గోధుమ మచ్చలుగా కనిపిస్తుంది.</string>
     <string name="desc_brown_spot">గోధుమ మచ్చలతో ఆకులపై వ్యాప్తి చెందే సాధారణ వ్యాధి.</string>
     <string name="desc_bacterial_blight">ప్రమేయం గల నీటి మచ్చలు ఏర్పడి తర్వాత ముదురు మచ్చలుగా మారతాయి.</string>
     <string name="desc_ferrugen">చుట్టూ ఎర్రని అంచులతో గోధుమ మచ్చలు ఏర్పడతాయి.</string>
-    <string name="desc_yellow_mosaic">వెయ్యి తెల్ల మూసల రూపంలో ఆకులపై కనిపిస్తుంది.</string>
+    <string name="desc_yellow_mosaic">వెయ్యి తెల్ల మూసల రూపంలో ఆకులపై కనిపిస్తుంది.\n\nజాగ్రత్తలు:\n• నిరోధక రకాలను పెంచండి\n• తెల్ల ఈగలను పర్యవేక్షించి నియంత్రించండి\n• సోకిన మొక్కలను వెంటనే తొలగించండి
+\n\nనిర్వహణ:\n• వేప నూనె లేదా సిఫారసు చేసిన పురుగుమందులు పిచికారీ చేయండి\n• పొలాన్ని కలుపు మొక్కల నుండి శుభ్రంగా ఉంచండి\n• ప్రమాదాన్ని తగ్గించడానికి విత్తన సమయాన్ని మార్చండి
+</string>
     <string name="desc_mosaic_virus">పచ్చటి మరియు పసుపు మచ్చల మాదిరిగా ఆకులపై కనిపిస్తుంది.</string>
     <string name="desc_powdery_mildew">స్పష్టమైన తెల్ల పౌడర్ ఆకులపై కనిపిస్తుంది.</string>
+    <string name="desc_caterpillar">పురుగులు (క్యాటర్పిల్లర్లు) సోయాబీన్ ఆకులను తిని రంధ్రాలు చేస్తాయి, దీని వలన దిగుబడి తగ్గుతుంది.
+\n\nజాగ్రత్తలు:\n• పొలాన్ని క్రమం తప్పకుండా పర్యవేక్షించండి\n• సహజ శత్రువులను (పక్షులు, ఉపయోగకరమైన పురుగులు) ప్రోత్సహించండి\n• తొందరగా గుర్తించడానికి ఫెరోమోన్ ట్రాప్‌లు వాడండి
+\n\nనిర్వహణ:\n• ప్రారంభ దశలోనే పురుగులను చేతితో తీసేయండి\n• బాసిల్లస్ థురింజియెన్సిస్ (Bt) వాడండి\n• తీవ్ర సంక్రమణ ఉన్నప్పుడు మాత్రమే పురుగుమందులు వాడండి
+</string>
 
     <!-- Disease Names -->
     <string name="mosaic_virus">మోసాయిక్ వైరస్</string>
@@ -45,8 +54,10 @@
     <string name="brown_spot">బ్రౌన్ స్పాట్</string>
     <string name="crestamento">క్రెస్టమెంటో</string>
     <string name="ferrugen">ఫెర్రూజెన్</string>
+    <string name="frog_eye">ఫ్రాగ్ ఐ రోగం</string>
     <string name="powdery_mildew">పౌడరీ మిల్డ్యూ</string>
     <string name="septoria">సెప్టోరియా</string>
+    <string name="caterpillar">పురుగు</string>
 
     <string name="no_soyabean_leaf_detected">సోయాబీన్ ఆకును కనుగొనలేకపోయాము. </string>
     <string name="desclaimer">దయచేసి ఆకు భాగం లేదా వ్యాధి స్పష్టంగా కనిపించేలా చిత్రాన్ని క్రాప్ చేయండి. </string>

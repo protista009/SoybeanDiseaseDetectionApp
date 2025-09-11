@@ -18,6 +18,9 @@
         //History
         <string name="Clear_History" >Clear History</string>
 
+        //precautions
+        <string name="Show_Precautions" >Precautions and Remedies</string>
+
         //main
         <!-- Titles -->
         <string name="sudden_death_title">Sudden Death Syndrome</string>
@@ -29,17 +32,22 @@
         <string name="yellow_mosaic_title">Yellow Mosaic</string>
         <string name="mosaic_virus_title">Mosaic Virus</string>
         <string name="powdery_mildew_title">Powdery Mildew</string>
+        <string name="caterpillar_title">Caterpillar</string>
 
         <!-- Descriptions -->
-        <string name="desc_sudden_death">Sudden Death Syndrome (SDS) is a fungal disease in soybeans that causes yellowing, browning, and death of leaf tissues. It appears mid- to late-season and can severely reduce yield.</string>
+        <string name="desc_sudden_death">Sudden Death Syndrome (SDS) is a fungal disease in soybeans that causes yellowing, browning, and death of leaf tissues. It appears mid- to late-season and can severely reduce yield.\n\nPrecautions:\n• Plant resistant varieties\n• Improve field drainage\n• Rotate with non-host crops\n• Avoid planting in cold, wet soils
+\n\nManagement:\n• Use fungicide seed treatments\n• Control soybean cyst nematodes\n• Maintain proper soil health</string>
         <string name="desc_southern_blight">A soil-borne fungal disease causing leaf yellowing, wilting, and white fungal growth at the base of the stem.</string>
         <string name="desc_septoria">Septoria brown spot causes small, dark brown lesions on lower leaves, which may lead to premature defoliation in wet, warm conditions.</string>
         <string name="desc_brown_spot">A common fungal disease that leads to small reddish-brown spots on leaves, starting from the lower canopy and moving upward.</string>
         <string name="desc_bacterial_blight">Caused by Pseudomonas syringae, it creates water-soaked spots that turn brown and may cause leaf tearing under high humidity.</string>
         <string name="desc_ferrugen">This disease shows circular gray spots with reddish borders on leaves and can reduce yield significantly in humid environments.</string>
-        <string name="desc_yellow_mosaic">A viral disease spread by whiteflies; it causes yellow patches and mosaic-like patterns on leaves, leading to stunted plant growth.</string>
+        <string name="desc_yellow_mosaic">A viral disease spread by whiteflies; it causes yellow patches and mosaic-like patterns on leaves, leading to stunted plant growth.\n\nPrecautions:\n• Grow resistant varieties\n• Monitor and control whiteflies\n• Remove infected plants early
+\n\nManagement:\n• Apply neem oil or recommended insecticides\n• Keep fields weed-free\n• Adjust planting time to reduce risk</string>
         <string name="desc_mosaic_virus">A general term for several viruses that cause mottled green and yellow patterns on leaves, often reducing vigor and yield.</string>
         <string name="desc_powdery_mildew">Characterized by white, powdery fungal growth on the surface of leaves; typically appears in dry, warm weather.</string>
+        <string name="desc_caterpillar">Caterpillar infestation occurs when larvae feed on soybean leaves, creating irregular holes and severe leaf damage. This reduces photosynthesis, weakens the plant, and may lower overall crop yield if not controlled in time.\n\nPrecautions:\n• Monitor fields regularly\n• Encourage natural predators (birds, beneficial insects)\n• Use pheromone traps for early detection
+\n\nManagement:\n• Handpick caterpillars at early stages\n• Apply Bacillus thuringiensis (Bt)\n• Use insecticides only if infestation is severe</string>
 
         //predict diseases
         <string name="mosaic_virus">Mosaic Virus</string>
@@ -49,6 +57,7 @@
         <string name="bacterial_blight">Bacterial blight</string>
         <string name="crestamento">Crestamento</string>
         <string name="ferrugen">Ferrugen</string>
+        <string name="frog_eye">Frog eye</string>
         <string name="brown_spot">Brown spot</string>
         <string name="unlabeled">unlabeled</string>
         <string name="caterpillar">caterpillar</string>

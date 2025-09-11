@@ -227,6 +227,17 @@
                     android:textSize="17sp" />
 
                 <!-- Progress -->
+                <Button
+                    android:id="@+id/btnShowPrecautions"
+                    android:layout_width="198dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="3dp"
+                    android:backgroundTint="#E8F5E9"
+                    android:text="@string/Show_Precautions"
+                    android:textColor="#1746BC"
+                    android:textSize="17sp"
+                    android:visibility="visible" />
+
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
